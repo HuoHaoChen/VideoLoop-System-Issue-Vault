@@ -1,0 +1,11 @@
+{
+  "version": "2.2",
+  "domains": ["运营","认知","系统"],
+  "soft_domains": ["认知","系统"],
+  "required": {
+    "problem": ["id","type","title","domain","ptype","level","status","process_captured","recorded_by"],
+    "change": ["id","type","title","domain","problems","status","verdict","calibrated","process_captured","recorded_by","evaluator"],
+    "calibration": ["id","type","target","method"],
+    "meta": ["id","type","period"]
+  }
+}
