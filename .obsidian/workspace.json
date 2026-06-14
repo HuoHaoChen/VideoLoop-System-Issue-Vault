@@ -1,0 +1,238 @@
+{
+  "main": {
+    "id": "6fd632f70cf07c34",
+    "type": "split",
+    "children": [
+      {
+        "id": "4fffb4eb4dbee76a",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "9322f392dcd3fafa",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "config/防腐层说明.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "防腐层说明"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "f665edb919e995ce",
+    "type": "split",
+    "children": [
+      {
+        "id": "295f70ddc1a40dc6",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "080c6fc0b68c2d30",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
+            }
+          },
+          {
+            "id": "bc6771dcdaa96024",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "schema.json",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜索"
+            }
+          },
+          {
+            "id": "734907657f3181b8",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "书签"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 531.5
+  },
+  "right": {
+    "id": "0100601e5219d19c",
+    "type": "split",
+    "children": [
+      {
+        "id": "a1db0f039162c0fd",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "af48a9d17ef0332d",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "00-部署指南.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "00-部署指南 的反向链接列表"
+            }
+          },
+          {
+            "id": "8b0dfd7712e83b11",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "00-部署指南.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "00-部署指南 的出链列表"
+            }
+          },
+          {
+            "id": "c070e73dd1089bfc",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "标签"
+            }
+          },
+          {
+            "id": "06631b368e160182",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "添加笔记属性"
+            }
+          },
+          {
+            "id": "2dac218de5996a60",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "00-部署指南.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "00-部署指南 的大纲"
+            }
+          },
+          {
+            "id": "7852815f044e9b87",
+            "type": "leaf",
+            "state": {
+              "type": "copilot-chat-view",
+              "state": {},
+              "icon": "message-square",
+              "title": "Copilot"
+            }
+          }
+        ],
+        "currentTab": 5
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false,
+      "bases:新建数据库": false,
+      "templater-obsidian:Templater": false,
+      "copilot:Open Copilot Chat": false
+    }
+  },
+  "active": "080c6fc0b68c2d30",
+  "lastOpenFiles": [
+    "20-Cards/修改卡-20260614-0735-CAL调用日志系统-模板+Skill+记忆三件套落地.md",
+    "20-Cards/问题卡-20260614-0734-CAL引用有静态记录但无动态调用日志-无法审计使用频次与场景.md",
+    "00-Inbox/已补录",
+    "20-Cards/问题卡_测试-可删-20260613-1825.md",
+    "20-Cards/问题卡-20260613-0900-范例-怕数据差不敢发（认知域·可删）.md",
+    "20-Cards/问题卡-20260612-2100-范例-录入负担过重（系统域·可删）.md",
+    "20-Cards/问题卡-20260613-0901-范例-前3秒留不住人（运营域·可删）.md",
+    "20-Cards/问题卡-20260613-1825-测试-可删.md",
+    "20-Cards/问题卡-20260613-1154-VideoLoop启动-首次实战演练.md",
+    "20-Cards/问题卡-20260613-1510-DeepSeek模型无法访问外部网络.md",
+    "20-Cards/问题卡-20260613-1718-CAL卡片建完即吃灰-无自动引用机制.md",
+    "20-Cards/校准卡-20260613-1649-问题即解药原则.md",
+    "20-Cards/校准卡-20260613-1649b-苏格拉底追问原则.md",
+    "20-Cards/修改卡-20260613-1156-首轮上线检查清单.md",
+    "20-Cards/修改卡-20260612-2110-范例-极简投递（系统域·可删）.md",
+    "20-Cards/修改卡-20260613-1523-修DeepSeek base_url.md",
+    "20-Cards/修改卡-20260613-1724-CAL主动引用机制-记忆+Skill双保险.md",
+    "20-Cards/P-20260613-1718-CAL卡片建完即吃灰-无自动引用机制.md",
+    "30-Dashboards/引用统计看板.md",
+    "20-Cards/问题卡_CAL卡片建完即吃灰-无自动引用机制-20260613-1718.md",
+    "20-Cards/问题卡_DeepSeek模型无法访问外部网络-20260613-1510.md",
+    "20-Cards/问题卡_VideoLoop启动-首次实战演练-20260613-1154.md",
+    "20-Cards/问题卡_范例-前3秒留不住人（运营域·可删）-20260613-0901.md",
+    "20-Cards/问题卡_范例-怕数据差不敢发（认知域·可删）-20260613-0900.md",
+    "20-Cards/问题卡_范例-录入负担过重（系统域·可删）-20260612-2100.md",
+    "20-Cards/校准卡_问题即解药原则-20260613-1649.md",
+    "20-Cards/校准卡_苏格拉底追问原则-20260613-1649b.md",
+    "config/hermes.env.example",
+    "config",
+    "00-Inbox",
+    "90-Templates",
+    "10-Principles",
+    "20-Cards",
+    "30-Dashboards",
+    "Config/hermes.env.example",
+    "Config"
+  ]
+}
