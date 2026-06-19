@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# VideoLoop 闭环校验器 V2.3
+# VideoLoop 闭环校验器 V2.2
 # 用法: python validate_loop.py [vault路径]   或   python validate_loop.py --selftest
-# VideoLoop V2.3 — Tabbit 修复版 2026-06-18
-# 修复内容: M7(schema缺失静默) C6(待分类永不告警) M3(due日期格式静默跳过)
 import sys, os, re, json, glob, datetime
 
 ROOT = "."
@@ -11,8 +9,8 @@ for _a in sys.argv[1:]:
     if not _a.startswith("-"):
         ROOT = _a
 OPEN_PROBLEM = {"未处理","设计中","执行中","观察中"}
-OPEN_CHANGE  = {"设计中","执行中","观察中"}
-CONCLUSIVE   = {"有效","部分有效","无效","负面"}
+OPEN_CHANGE = {"设计中","执行中","观察中"}
+CONCLUSIVE = {"有效","部分有效","无效","负面"}
 SOFT_DOMAINS = {"认知","系统"}
 
 def parse_frontmatter(text):
@@ -36,10 +34,6 @@ def load_required(root):
     if os.path.exists(p):
         with open(p, encoding="utf-8") as f:
             return json.load(f).get("required", {})
-    # ── M7 修复：schema 缺失时明确告警，不再静默跳过 ────────────
-    print("WARN [schema缺失] 找不到 " + p
-          + "，必填字段校验已全部跳过！请确认运行目录是否正确。",
-          file=sys.stderr)
     return {}
 
 def run(root):
@@ -74,37 +68,17 @@ def run(root):
             if not fm.get("baseline_window") or not fm.get("minimum_effect"):
                 errors.append("[因果门控#C] " + rel + " 下结论前缺 baseline_window/minimum_effect")
         if t == "change" and fm.get("domain") in SOFT_DOMAINS and fm.get("significance") == "统计显著":
-            errors.append("[软领域显著禁用] " + rel + " domain=" + str(fm.get("domain"))
-                          + " 不得声称统计显著（单人小样本不成立）")
-        if (t == "change" and fm.get("domain") == "运营"
-                and fm.get("borrows_from") in SOFT_DOMAINS
-                and (fm.get("verdict") in CONCLUSIVE
-                     or fm.get("significance") == "统计显著")):
-            errors.append("[防腐层·方向阀] " + rel + " 运营决策借入软域("
-                          + str(fm.get("borrows_from"))
-                          + ")洞见只能当假设，须在运营域内独立验证后才能下结论")
-        if (t == "change" and fm.get("recorded_by")
-                and fm.get("recorded_by") == fm.get("evaluator")):
+            errors.append("[软领域显著禁用] " + rel + " domain=" + str(fm.get("domain")) + " 不得声称统计显著（单人小样本不成立）")
+        if t == "change" and fm.get("domain") == "运营" and fm.get("borrows_from") in SOFT_DOMAINS and (fm.get("verdict") in CONCLUSIVE or fm.get("significance") == "统计显著"):
+            errors.append("[防腐层·方向阀] " + rel + " 运营决策借入软域(" + str(fm.get("borrows_from")) + ")洞见只能当假设，须在运营域内独立验证后才能下结论")
+        if t == "change" and fm.get("recorded_by") and fm.get("recorded_by") == fm.get("evaluator"):
             errors.append("[裁判独立#5] " + rel + " 记录者=评估者")
         if t == "problem" and fm.get("status") == "已解决" and not fm.get("process_captured"):
             errors.append("[留痕门控] " + rel + " 已解决但 process_captured=false")
-
-        # ── M3 修复：due 日期格式不合规时给出明确告警，不再静默跳过 ──
-        due  = str(fm.get("due") or "")
+        due = str(fm.get("due") or "")
         oset = OPEN_PROBLEM if t == "problem" else (OPEN_CHANGE if t == "change" else set())
-        if due:
-            if not re.match(r"\d{4}-\d{2}-\d{2}$", due):
-                warns.append("[日期格式错误] " + rel
-                             + " due=" + due + "，应为 YYYY-MM-DD 格式")
-            elif due < today and fm.get("status") in oset:
-                warns.append("[逾期#6] " + rel + " due " + due)
-
-        # ── C6 修复：domain 长期停在"待分类"时发出告警 ───────────
-        if t in ("problem", "change") and fm.get("domain") == "待分类":
-            if fm.get("status") not in ("已解决", "已结案", "归档"):
-                warns.append("[未分类] " + rel
-                             + " domain 仍为 '待分类'，请尽快归属三域")
-
+        if re.match(r"\d{4}-\d{2}-\d{2}$", due) and due < today and fm.get("status") in oset:
+            warns.append("[逾期#6] " + rel + " due " + due)
     for w in warns:
         print("WARN", w)
     for e in errors:
@@ -119,18 +93,10 @@ def selftest():
     import tempfile
     d = tempfile.mkdtemp()
     os.makedirs(os.path.join(d, "20-Cards"))
-    json.dump({"required": {"change": ["id","type","verdict"]}},
-              open(os.path.join(d, "schema.json"), "w", encoding="utf-8"))
-    bad = "\n".join(["---","id: C-test","type: change","domain: 认知",
-                     "significance: 统计显著","verdict: 有效",
-                     "calibrated: false","process_captured: false",
-                     "recorded_by: a","evaluator: a","---"])
+    json.dump({"required": {"change": ["id","type","verdict"]}}, open(os.path.join(d, "schema.json"), "w", encoding="utf-8"))
+    bad = "\n".join(["---","id: C-test","type: change","domain: 认知","significance: 统计显著","verdict: 有效","calibrated: false","process_captured: false","recorded_by: a","evaluator: a","---"])
     open(os.path.join(d, "20-Cards", "bad.md"), "w", encoding="utf-8").write(bad)
-    bad2 = "\n".join(["---","id: C-test2","type: change","domain: 运营",
-                      "borrows_from: 认知","verdict: 有效",
-                      "calibrated: true","calibration_ref: CAL-x",
-                      "process_captured: true","baseline_window: x",
-                      "minimum_effect: x","recorded_by: a","evaluator: b","---"])
+    bad2 = "\n".join(["---","id: C-test2","type: change","domain: 运营","borrows_from: 认知","verdict: 有效","calibrated: true","calibration_ref: CAL-x","process_captured: true","baseline_window: x","minimum_effect: x","recorded_by: a","evaluator: b","---"])
     open(os.path.join(d, "20-Cards", "bad2.md"), "w", encoding="utf-8").write(bad2)
     print("自检·方向阀：另用一张 运营卡借认知洞见却声称已验证 的卡测试——")
     print("自检：用一张同时违反 校准/留痕/裁判独立/因果/软领域显著 的卡测试——")

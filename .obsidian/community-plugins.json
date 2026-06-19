@@ -2,5 +2,6 @@
   "dataview",
   "templater-obsidian",
   "quickadd",
-  "copilot"
+  "copilot",
+  "obsidian-git"
 ]
