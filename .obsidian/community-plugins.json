@@ -3,5 +3,6 @@
   "templater-obsidian",
   "quickadd",
   "copilot",
-  "obsidian-git"
+  "obsidian-git",
+  "obsidian-linter"
 ]
