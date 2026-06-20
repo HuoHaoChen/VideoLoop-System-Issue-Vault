@@ -4,7 +4,7 @@ type: change
 title: 修DeepSeek base_url
 domain: 系统
 problems: [P-20260613-1510]
-status: 执行中
+
 baseline_window: 当前——模型报「无法访问外部网络」，web 工具调用失败
 minimum_effect: 模型能成功调用 web_search 工具并返回搜索结果
 confounds: DeepSeek API 服务本身波动；V4-pro 是否支持 function calling
