@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "90-Templates/TEMPLATE-Inspiration.md",
+                "file": "20-Cards/问题卡-20260621-133314-VideoLoop 偏问题管理，缺 IP 人格层.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "TEMPLATE-Inspiration"
+              "title": "问题卡-20260621-133314-VideoLoop 偏问题管理，缺 IP 人格层"
             }
           }
         ]
@@ -40,7 +40,7 @@
             "state": {
               "type": "file-explorer",
               "state": {
-                "sortOrder": "alphabetical",
+                "sortOrder": "byModifiedTime",
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
@@ -199,6 +199,8 @@
   },
   "active": "9322f392dcd3fafa",
   "lastOpenFiles": [
+    "20-Cards/修改卡-20260621-133331-V2_3 IP实体层扩展—新增persona_values_worldview三类实体.md",
+    "90-Templates/TEMPLATE-Inspiration.md",
     "30-Dashboards/面板.md",
     "30-Dashboards/灵感看板.md",
     "30-Dashboards/待办与逾期.md",
@@ -223,8 +225,6 @@
     "20-Cards/问题卡-20260613-0900-范例-怕数据差不敢发（认知域·可删）.md",
     "20-Cards/问题卡-20260612-2100-范例-录入负担过重（系统域·可删）.md",
     "90-Templates/TEMPLATE-Problem.md",
-    "90-Templates/TEMPLATE-Meta.md",
-    "90-Templates/TEMPLATE-Change.md",
     "00-Inbox/已补录",
     "config/hermes.env.example",
     "config",
