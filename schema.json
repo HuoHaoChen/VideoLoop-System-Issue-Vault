@@ -1,5 +1,22 @@
 {
   "version": "2.3",
+  "changelog": [
+    {
+      "version": "2.3",
+      "date": "2026-06-21",
+      "changes": "新增 persona/values/worldview 三类实体，inspiration 增加 persona_ref/value_ref/worldview_ref 可选字段"
+    },
+    {
+      "version": "2.3",
+      "date": "2026-06-18",
+      "changes": "Tabbit 修复版 — C1(calibration body双写) C2(meta缺period) C3(inspiration缺失) M5(文件名安全) L1(ID碰撞)"
+    },
+    {
+      "version": "2.2",
+      "date": "2026-06-13",
+      "changes": "初始版本：problem/change/calibration/meta 四类实体 + 三域 + 防腐层"
+    }
+  ],
   "domains": ["运营","认知","系统"],
   "soft_domains": ["认知","系统"],
   "required": {
@@ -7,11 +24,17 @@
     "change": ["id","type","title","domain","problems","status","verdict","calibrated","process_captured","recorded_by","evaluator"],
     "calibration": ["id","type","target","method"],
     "meta": ["id","type","period"],
-    "inspiration": ["id","raw","domain","recorded_by"]
+    "inspiration": ["id","raw","domain","recorded_by"],
+    "persona": ["id","type","statement","domain","status"],
+    "values": ["id","type","statement","domain","status"],
+    "worldview": ["id","type","statement","domain","status"]
   },
   "optional": {
     "calibration": ["inspiration_ref"],
-    "inspiration": ["status","target_exit","exit_status","product_ref","evaluator","demote_reason","review_date","posthoc_hit","calibration_output","priority","created"]
+    "inspiration": ["status","target_exit","exit_status","product_ref","evaluator","demote_reason","review_date","posthoc_hit","calibration_output","priority","created","persona_ref","value_ref","worldview_ref"],
+    "persona": ["tags","created","examples_note"],
+    "values": ["tags","created","examples_note"],
+    "worldview": ["tags","created","examples_note","method"]
   },
   "fields": {
     "inspiration": {
@@ -29,10 +52,44 @@
       "posthoc_hit": "bool · 被否后是否其实命中（反向指标）",
       "calibration_output": "relation · 指向本灵感产出的 CAL 卡（双向溯源）",
       "priority": "enum · 高 / 中 / 低",
-      "created": "date · 创建日期"
+      "created": "date · 创建日期",
+      "persona_ref": "relation · 可选，关联到影响此灵感的你的人格侧面",
+      "value_ref": "relation · 可选，触发的价值观",
+      "worldview_ref": "relation · 可选，被调用或被挑战的世界观条目"
     },
     "calibration": {
       "inspiration_ref": "relation · 可选，CAL 卡回指来源灵感 id（补全溯源链）"
+    },
+    "persona": {
+      "id": "string · 唯一编号 · 格式 PER-YYYYMMDD-HHMMSS",
+      "type": "enum · persona",
+      "statement": "string · 一句话人格定义（如「认知翻译官：把复杂机制翻译成粉丝能懂的操作结论」）",
+      "domain": "enum · 运营 / 认知 / 系统",
+      "status": "enum · 草稿 / 验证中 / 已固化",
+      "tags": "list · 标签",
+      "created": "date · 创建日期",
+      "examples_note": "string · 使用说明：案例关联通过 Dataview 反向查询实现，不在此处硬编码引用列表"
+    },
+    "values": {
+      "id": "string · 唯一编号 · 格式 VAL-YYYYMMDD-HHMMSS",
+      "type": "enum · values",
+      "statement": "string · 一句话价值观（如「尊重长期主义：不追短期爆款，只做三个月后还能看的视频」）",
+      "domain": "enum · 运营 / 认知 / 系统",
+      "status": "enum · 草稿 / 验证中 / 已固化",
+      "tags": "list · 标签",
+      "created": "date · 创建日期",
+      "examples_note": "string · 使用说明：案例关联通过 Dataview 反向查询实现，不在此处硬编码引用列表"
+    },
+    "worldview": {
+      "id": "string · 唯一编号 · 格式 WV-YYYYMMDD-HHMMSS",
+      "type": "enum · worldview",
+      "statement": "string · 一句话世界观（如「世间万物都有两面性，只要找到反面，问题就变答案」）",
+      "domain": "enum · 运营 / 认知 / 系统",
+      "status": "enum · 草稿 / 验证中 / 已固化",
+      "method": "string · 可选，解释/操作的具体方法（如「苏格拉底追问」「框架转换」）",
+      "tags": "list · 标签",
+      "created": "date · 创建日期",
+      "examples_note": "string · 使用说明：案例关联通过 Dataview 反向查询实现，不在此处硬编码引用列表"
     }
   }
 }
