@@ -199,6 +199,8 @@
   },
   "active": "9322f392dcd3fafa",
   "lastOpenFiles": [
+    "20-Cards/修改卡-20260621-170154-传感器不确定性原则—工具返回值加认识论开关.md",
+    "20-Cards/问题卡-20260621-165309-Hermes 将API空返回误判为数据为空—事实诊断全错.md",
     "20-Cards/修改卡-20260621-133331-V2_3 IP实体层扩展—新增persona_values_worldview三类实体.md",
     "90-Templates/TEMPLATE-Inspiration.md",
     "30-Dashboards/面板.md",
@@ -223,8 +225,6 @@
     "20-Cards/问题卡-20260613-1154-VideoLoop启动-首次实战演练.md",
     "20-Cards/问题卡-20260613-0901-范例-前3秒留不住人（运营域·可删）.md",
     "20-Cards/问题卡-20260613-0900-范例-怕数据差不敢发（认知域·可删）.md",
-    "20-Cards/问题卡-20260612-2100-范例-录入负担过重（系统域·可删）.md",
-    "90-Templates/TEMPLATE-Problem.md",
     "00-Inbox/已补录",
     "config/hermes.env.example",
     "config",
