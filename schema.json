@@ -1,6 +1,11 @@
 {
-  "version": "2.3.1",
+  "version": "3.0.0",
   "changelog": [
+    {
+      "version": "3.0.0",
+      "date": "2026-07-01",
+      "changes": "V3 升级：定位为「内容判断校准引擎」。新增 asset_type 字段支持资产分类（user_pain_hypothesis/counterintuitive_judgment/boundary_condition/failure_antipattern）。新增 change 的 calibration_ref 必填规则（asset_type=judgment_change 时）。新增 25-Assets / 50-TruthSource / 60-IP-Identity 目录。"
+    },
     {
       "version": "2.3.1",
       "date": "2026-06-24",
@@ -24,6 +29,16 @@
   ],
   "domains": ["运营","认知","系统"],
   "soft_domains": ["认知","系统"],
+  "asset_types": [
+    "user_pain_hypothesis",
+    "counterintuitive_judgment",
+    "boundary_condition",
+    "failure_antipattern",
+    "success_condition",
+    "judgment_change",
+    "operational_change"
+  ],
+  "confidence_levels": ["S0","S1","S2","S3","Retired"],
   "required": {
     "problem": ["id","type","title","domain","ptype","level","status","process_captured","recorded_by"],
     "change": ["id","type","title","domain","problems","status","verdict","calibrated","process_captured","recorded_by","evaluator"],
@@ -34,20 +49,53 @@
     "values": ["id","type","statement","domain","status"],
     "worldview": ["id","type","statement","domain","status"]
   },
+  "conditional_required": {
+    "change": {
+      "calibration_ref": "当 asset_type = judgment_change 时必填，否则校验 FAIL"
+    }
+  },
   "optional": {
-    "change": ["cal_scan_done","cal_scan_at","cal_scan_result","referenced_cals"],
-    "calibration": ["inspiration_ref"],
-    "inspiration": ["status","target_exit","exit_status","product_ref","evaluator","demote_reason","review_date","posthoc_hit","calibration_output","priority","created","persona_ref","value_ref","worldview_ref"],
+    "problem": ["asset_type","confidence_level","target_users","counterintuitive_judgment","boundary_condition","prediction","prediction_confidence"],
+    "change": ["cal_scan_done","cal_scan_at","cal_scan_result","referenced_cals","asset_type","calibration_ref","confidence_level"],
+    "calibration": ["inspiration_ref","asset_type","confidence_level","applicable_conditions","expiry_conditions"],
+    "meta": ["asset_type"],
+    "inspiration": ["status","target_exit","exit_status","product_ref","evaluator","demote_reason","review_date","posthoc_hit","calibration_output","priority","created","persona_ref","value_ref","worldview_ref","asset_type","confidence_level"],
     "persona": ["tags","created","examples_note"],
     "values": ["tags","created","examples_note"],
     "worldview": ["tags","created","examples_note","method"]
+  },
+  "validation_rules": {
+    "calibration_ref_required": "Change 卡 asset_type = judgment_change 时 calibration_ref 必填。validator 检测：若 asset_type=judgment_change 且 calibration_ref 为空 → FAIL「判断修改未引用 CAL，闭环不成立」",
+    "confidence_gate": "asset_type = user_pain_hypothesis / counterintuitive_judgment / boundary_condition 时 confidence_level 推荐填写。S0 禁止写成事实语气。",
+    "truthsource_gate": "动态真相源只收录 S2/S3 资产。S1 可临时观察但标注。S0 不入。",
+    "corruption_gate": "运营域 borrows_from=软域 时 verdict 不能为「有效」。validator 检测 fail。",
+    "soft_domain_significance": "domain=认知/系统 时 significance 只能为「方向性」。validator 检测 fail。"
   },
   "fields": {
     "change": {
       "cal_scan_done": "bool · 是否已完成 CAL 扫描",
       "cal_scan_at": "datetime · CAL 扫描完成时间戳 (ISO 8601)",
       "cal_scan_result": "object · 本次 CAL 扫描结果摘要 {domain, shown_strong[], shown_normal[], decision, skip_reason}",
-      "referenced_cals": "array · 引用的 CAL 卡 [{cal_id, reason, referenced_at}]"
+      "referenced_cals": "array · 引用的 CAL 卡 [{cal_id, reason, referenced_at}]",
+      "asset_type": "enum · judgment_change / operational_change / user_pain_hypothesis / counterintuitive_judgment / boundary_condition / failure_antipattern",
+      "calibration_ref": "string · CAL-ID · asset_type=judgment_change 时必填",
+      "confidence_level": "enum · S0/S1/S2/S3/Retired"
+    },
+    "calibration": {
+      "inspiration_ref": "relation · 可选，CAL 卡回指来源灵感 id（补全溯源链）",
+      "asset_type": "enum · user_pain_hypothesis / counterintuitive_judgment / boundary_condition / failure_antipattern",
+      "confidence_level": "enum · S0/S1/S2/S3/Retired",
+      "applicable_conditions": "string · 适用条件 — 这条尺子在什么场景下有效",
+      "expiry_conditions": "string · 失效条件 — 什么情况下这条尺子应该退役"
+    },
+    "problem": {
+      "asset_type": "enum · user_pain_hypothesis / counterintuitive_judgment / boundary_condition / failure_antipattern",
+      "confidence_level": "enum · S0/S1/S2/S3/Retired",
+      "target_users": "string · 目标人群假设",
+      "counterintuitive_judgment": "string · 一句反常识判断",
+      "boundary_condition": "string · 适用/失效边界条件",
+      "prediction": "string · 发布前预测",
+      "prediction_confidence": "int · 预测信心分 1-5"
     },
     "inspiration": {
       "id": "string · 唯一编号",
@@ -67,10 +115,9 @@
       "created": "date · 创建日期",
       "persona_ref": "relation · 可选，关联到影响此灵感的你的人格侧面",
       "value_ref": "relation · 可选，触发的价值观",
-      "worldview_ref": "relation · 可选，被调用或被挑战的世界观条目"
-    },
-    "calibration": {
-      "inspiration_ref": "relation · 可选，CAL 卡回指来源灵感 id（补全溯源链）"
+      "worldview_ref": "relation · 可选，被调用或被挑战的世界观条目",
+      "asset_type": "enum · user_pain_hypothesis / counterintuitive_judgment / boundary_condition / failure_antipattern / success_condition",
+      "confidence_level": "enum · S0/S1/S2/S3/Retired"
     },
     "persona": {
       "id": "string · 唯一编号 · 格式 PER-YYYYMMDD-HHMMSS",
