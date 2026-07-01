@@ -1,6 +1,11 @@
 {
-  "version": "2.3",
+  "version": "2.3.1",
   "changelog": [
+    {
+      "version": "2.3.1",
+      "date": "2026-06-24",
+      "changes": "新增 change 类型可选字段 cal_scan_done/cal_scan_at/cal_scan_result/referenced_cals，配合 videoloop-cal-scan V2 skill"
+    },
     {
       "version": "2.3",
       "date": "2026-06-21",
@@ -30,6 +35,7 @@
     "worldview": ["id","type","statement","domain","status"]
   },
   "optional": {
+    "change": ["cal_scan_done","cal_scan_at","cal_scan_result","referenced_cals"],
     "calibration": ["inspiration_ref"],
     "inspiration": ["status","target_exit","exit_status","product_ref","evaluator","demote_reason","review_date","posthoc_hit","calibration_output","priority","created","persona_ref","value_ref","worldview_ref"],
     "persona": ["tags","created","examples_note"],
@@ -37,6 +43,12 @@
     "worldview": ["tags","created","examples_note","method"]
   },
   "fields": {
+    "change": {
+      "cal_scan_done": "bool · 是否已完成 CAL 扫描",
+      "cal_scan_at": "datetime · CAL 扫描完成时间戳 (ISO 8601)",
+      "cal_scan_result": "object · 本次 CAL 扫描结果摘要 {domain, shown_strong[], shown_normal[], decision, skip_reason}",
+      "referenced_cals": "array · 引用的 CAL 卡 [{cal_id, reason, referenced_at}]"
+    },
     "inspiration": {
       "id": "string · 唯一编号",
       "raw": "string · 原始闪念，写入后不可改、永不删",

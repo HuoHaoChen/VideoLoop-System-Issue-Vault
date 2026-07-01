@@ -1,0 +1,58 @@
+{
+  "run_id": "test-abc12345",
+  "workspace_name": "哈马斯空间",
+  "canonical_registry_version": "v1",
+  "entries": [
+    {
+      "evidence_id": "ev-001-precheck",
+      "producer": "notion_safe",
+      "wrapper_version": "2.0",
+      "run_id": "test-abc12345",
+      "operation": "precheck",
+      "endpoint": "/v1/users/me",
+      "target_id": "",
+      "workspace_name": "哈马斯空间",
+      "canonical_registry_version": "",
+      "state": "HAS_DATA",
+      "http_status": 200,
+      "cursor_chain": [],
+      "input_hash": "",
+      "response_hash": "sha256-hash-here",
+      "created_at": "2026-06-21T12:00:00.000Z"
+    },
+    {
+      "evidence_id": "ev-002-children",
+      "producer": "notion_safe",
+      "wrapper_version": "2.0",
+      "run_id": "test-abc12345",
+      "operation": "read_all_children",
+      "endpoint": "/v1/blocks/page-123/children",
+      "target_id": "page-123",
+      "workspace_name": "哈马斯空间",
+      "canonical_registry_version": "v1",
+      "state": "HAS_DATA",
+      "http_status": 200,
+      "cursor_chain": [],
+      "input_hash": "sha256-of-page-id",
+      "response_hash": "sha256-of-response",
+      "created_at": "2026-06-21T12:00:01.000Z"
+    },
+    {
+      "evidence_id": "ev-003-404",
+      "producer": "notion_safe",
+      "wrapper_version": "2.0",
+      "run_id": "test-abc12345",
+      "operation": "http_get",
+      "endpoint": "/v1/pages/bad-id/markdown",
+      "target_id": "bad-id",
+      "workspace_name": "哈马斯空间",
+      "canonical_registry_version": "v1",
+      "state": "UNREADABLE_NOT_FOUND",
+      "http_status": 404,
+      "cursor_chain": [],
+      "input_hash": "",
+      "response_hash": "sha256-of-404-body",
+      "created_at": "2026-06-21T12:00:02.000Z"
+    }
+  ]
+}

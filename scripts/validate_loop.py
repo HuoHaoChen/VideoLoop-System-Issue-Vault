@@ -105,6 +105,61 @@ def run(root):
                 warns.append("[未分类] " + rel
                              + " domain 仍为 '待分类'，请尽快归属三域")
 
+        # ── V2.3.1: CAL 扫描字段校验（videoloop-cal-scan V2） ───
+        if t == "change":
+            # cal_scan_done=true 时必须存在 cal_scan_at
+            if fm.get("cal_scan_done") and not fm.get("cal_scan_at"):
+                warns.append("[CAL扫描] " + rel + " cal_scan_done=true 但缺 cal_scan_at")
+            # referenced_cals 非空时每条必须含 cal_id 和 referenced_at
+            ref_cals = fm.get("referenced_cals")
+            if ref_cals:
+                # frontmatter 解析后可能是字符串或列表，做容错
+                if isinstance(ref_cals, str):
+                    ref_cals = [ref_cals]
+                if isinstance(ref_cals, list):
+                    for i, rc in enumerate(ref_cals):
+                        if isinstance(rc, dict):
+                            if not rc.get("cal_id"):
+                                errors.append("[CAL引用] " + rel + " referenced_cals[" + str(i) + "] 缺 cal_id")
+                            if not rc.get("referenced_at"):
+                                errors.append("[CAL引用] " + rel + " referenced_cals[" + str(i) + "] 缺 referenced_at")
+            # 双路 mtime 失效检测：文件系统 mtime + frontmatter updated
+            if fm.get("cal_scan_done") and fm.get("cal_scan_at"):
+                try:
+                    # 路径 1：文件系统 mtime（操作系统级事实，最可靠）
+                    fs_mtime = os.path.getmtime(fp)
+                    scan_str = str(fm["cal_scan_at"])
+                    # 支持 ISO 8601 (2026-06-24T15:58:52) 和纯日期 (2026-06-24)
+                    if "T" in scan_str:
+                        scan_ts = datetime.datetime.fromisoformat(
+                            scan_str.replace("Z", "+00:00").split("+")[0]
+                        ).timestamp()
+                    else:
+                        scan_ts = datetime.datetime.strptime(scan_str[:10], "%Y-%m-%d").timestamp()
+                    if fs_mtime > scan_ts + 1:
+                        warns.append("[CAL扫描失效·mtime] " + rel
+                                     + " 文件修改时间晚于 cal_scan_at，cal_scan_done 应重置为 false")
+                except Exception:
+                    pass
+                # 路径 2：frontmatter updated 字段（兜底）
+                try:
+                    fm_upd = fm.get("updated")
+                    if fm_upd:
+                        scan_str2 = str(fm["cal_scan_at"])
+                        if "T" in scan_str2:
+                            scan_dt2 = datetime.datetime.fromisoformat(
+                                scan_str2.replace("Z", "+00:00").split("+")[0]
+                            ).date()
+                        else:
+                            scan_dt2 = datetime.datetime.strptime(scan_str2[:10], "%Y-%m-%d").date()
+                        upd_dt = datetime.datetime.strptime(str(fm_upd)[:10], "%Y-%m-%d").date()
+                        if upd_dt > scan_dt2:
+                            warns.append("[CAL扫描失效·frontmatter] " + rel
+                                         + " updated(" + str(upd_dt) + ") > cal_scan_at(" + str(scan_dt2)
+                                         + ")，cal_scan_done 应重置为 false")
+                except Exception:
+                    pass
+
     for w in warns:
         print("WARN", w)
     for e in errors:
