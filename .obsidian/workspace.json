@@ -174,14 +174,23 @@
               "icon": "lucide-ghost",
               "title": "copilot-chat-view"
             }
+          },
+          {
+            "id": "0449633f9cb40635",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {},
+              "icon": "git-pull-request",
+              "title": "Source Control"
+            }
           }
         ],
-        "currentTab": 5
+        "currentTab": 6
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
