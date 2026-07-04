@@ -1,30 +1,78 @@
-# VideoLoop V2.3
+# VideoLoop｜系统问题反馈引擎 (SIFE)
 
-单一真相源 = 本仓库。卡片分「结论层（执行）」与「过程层（成长）」。
-三域平权：每张卡用 domain 标注属于 运营 / 认知 / 系统，三类同等专业纳入。
+> System Issue Feedback Engine — 以系统自身故障、流程卡点、工具误判和 AI 越权为输入，用「捕获→定级→归因→修复→校准→防再发」闭环，把每次系统问题沉淀为可复用的系统校准卡。
 
-## 卡片类型
+```
+SIFE（系统账号·独立隔离）
+  P → 风险矩阵定级 → C → CAL → Meta → KEDB
+        │（S1 致命一次即升，其余按严重度×频率矩阵）
+        │（方向阀：借想法不搬确定性 + 人工确认）
+        ▼
+  control-plane / 13_rule_candidates / pending → RFC → dry-run → human owner → active
+```
+
+旧名 ~~内容判断校准引擎~~ 已废弃，内容判断职能归还主账号。
+
+## 四库分工
+
+| 库 | 定位 |
+|----|------|
+| Notion（主账号） | 灵感处理 + 当前运行记录 |
+| SIFE（系统账号） | 系统问题反馈引擎 + 故障校准 |
+| Hermes | 执行代理 + 安全封装 |
+| GitHub (control-plane) | 规则版本源（schema / prompt / validator / changelog） |
+
+## 核心闭环
+
+**P → C → CAL → Meta** 结构互锁。C 卡必须显式引用 CAL（`calibration_ref`），不可只靠人工自觉。
+
+## 三件真机器
+
+| 机器 | 说明 |
+|------|------|
+| ① 严重度×频率风险矩阵 | S1 致命一次即升，S4 轻微批量处理，替代一刀切 repeat≥3 |
+| ② 4 个真实指标 | 复发率 / MTTD / MTTR / CAL 命中率（月度 Meta 卡读出） |
+| ③ 已知错误库 KEDB | 新问题先查库，命中则 repeat_count+1 自动套矩阵 |
+
+## 卡型（仅系统域）
 
 | 类型 | 命令 | 用途 |
-|:---|:---|:---|
-| 问题卡 | `problem` | 捕获问题 — 什么不对 |
-| 修改卡 | `change` | 设计方案 — 怎么改 |
-| 校准卡 | `calibration` | 定义标尺 —「有效」是什么意思 |
-| 元卡 | `meta` | 月度原则复盘 |
-| 灵感卡 | `inspiration` | 捕获原始洞察 |
-| 人格卡 | `persona` | 定义你的人格侧面 |
-| 价值观卡 | `values` | 定义你的核心价值观 |
-| 世界观卡 | `worldview` | 定义你解释世界的核心模型 |
+|------|------|------|
+| 系统问题卡 | `problem` | 捕获系统故障 — 现象+触发+证据，含 severity 定级 |
+| 系统修复卡 | `change` | 设计方案 — 怎么改，judgment_change 必须带 calibration_ref |
+| 系统校准卡 | `calibration` | 沉淀系统校准 — 含 hit_count 命中计数 |
+| 月度元卡 | `meta` | 读出 4 指标 + 复查 KEDB |
+
+## 目录结构
+
+```
+系统问题反馈引擎/
+├── 10-Principles/     # 核心原则
+├── 13_rule_candidates/# 规则候选池（方向阀入口）
+├── 20-Cards/          # 活跃卡片库（P / C / CAL / M）
+├── 30-Dashboards/     # 系统域看板
+├── 90-Templates/      # 系统域模板
+├── config/            # 配置与防腐层
+├── hermes-v2/         # 防瞎编测试套件
+├── scripts/           # 自动化脚本
+├── schema.json        # 卡片 Schema (v3.1.1)
+└── known_error_db.json# 已知错误库 KEDB
+```
 
 ## 命令
 
-```
+```bash
 建卡: python scripts/new_card.py problem "标题"
+建卡: python scripts/new_card.py change "标题"
 建卡: python scripts/new_card.py calibration "标题"
-建卡: python scripts/new_card.py persona "人格侧面名"
-建卡: python scripts/new_card.py values "价值观名"
-建卡: python scripts/new_card.py worldview "世界观名"
+建卡: python scripts/new_card.py meta "标题"
 校验: python scripts/validate_loop.py .
-自检: python scripts/validate_loop.py --selftest
 备份: python scripts/backup.py
 ```
+
+## 边界
+
+- 只存系统问题，不存运营/认知域内容（已纯化至主账号）
+- 系统问题永不直接改 active 规则
+- 升 rule_candidate 均经人工确认 + 方向阀
+- 本库独立于 control-plane / runtime-export / knowledge-vault

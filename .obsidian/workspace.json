@@ -20,8 +20,23 @@
               "icon": "lucide-file",
               "title": "问题卡-20260621-133314-VideoLoop 偏问题管理，缺 IP 人格层"
             }
+          },
+          {
+            "id": "745a25c052b89f59",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "hermes-v2/tests/cal_scan_v2_test.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "cal_scan_v2_test"
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -197,43 +212,43 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "9322f392dcd3fafa",
+  "active": "745a25c052b89f59",
   "lastOpenFiles": [
-    "20-Cards/修改卡-20260621-170154-传感器不确定性原则—工具返回值加认识论开关.md",
-    "20-Cards/问题卡-20260621-165309-Hermes 将API空返回误判为数据为空—事实诊断全错.md",
-    "20-Cards/修改卡-20260621-133331-V2_3 IP实体层扩展—新增persona_values_worldview三类实体.md",
-    "90-Templates/TEMPLATE-Inspiration.md",
-    "30-Dashboards/面板.md",
-    "30-Dashboards/灵感看板.md",
-    "30-Dashboards/待办与逾期.md",
-    "30-Dashboards/未归域告警看板.md",
-    "30-Dashboards/三域看板.md",
-    "30-Dashboards/总览.md",
-    "30-Dashboards/引用统计看板.md",
-    "30-Dashboards/引用断链看板.md",
-    "30-Dashboards/校准看板.md",
-    "20-Cards/修改卡-20260613-1523-修DeepSeek base_url.md",
-    "20-Cards/元卡-20260618-130057-2026年6月月度复盘.md",
-    "20-Cards/修改卡-20260618-130817-VideoLoop脚本层第一次系统性Bug修复.md",
-    "20-Cards/修改卡-20260614-0735-CAL调用日志系统-模板+Skill+记忆三件套落地.md",
-    "20-Cards/修改卡-20260613-1156-首轮上线检查清单.md",
-    "20-Cards/修改卡-20260612-2110-范例-极简投递（系统域·可删）.md",
-    "20-Cards/校准卡-20260613-1649-问题即解药原则.md",
-    "20-Cards/问题卡-20260614-0734-CAL引用有静态记录但无动态调用日志-无法审计使用频次与场景.md",
-    "20-Cards/问题卡-20260613-1718-CAL卡片建完即吃灰-无自动引用机制.md",
-    "20-Cards/问题卡-20260613-1510-DeepSeek模型无法访问外部网络.md",
-    "20-Cards/问题卡-20260613-1154-VideoLoop启动-首次实战演练.md",
-    "20-Cards/问题卡-20260613-0901-范例-前3秒留不住人（运营域·可删）.md",
-    "20-Cards/问题卡-20260613-0900-范例-怕数据差不敢发（认知域·可删）.md",
-    "00-Inbox/已补录",
-    "config/hermes.env.example",
-    "config",
-    "00-Inbox",
-    "90-Templates",
-    "10-Principles",
-    "20-Cards",
-    "30-Dashboards",
-    "Config/hermes.env.example",
-    "Config"
+    "conflict-files-obsidian-git.md",
+    "20-Cards/问题卡-20260621-133314-VideoLoop 偏问题管理，缺 IP 人格层.md",
+    "obsidian_or_archive/30-Dashboards/价值观总览看板.md",
+    "obsidian_or_archive/30-Dashboards/世界观总览看板.md",
+    "obsidian_or_archive/30-Dashboards",
+    "obsidian_or_archive",
+    "IP_entity/90-Templates/TEMPLATE-Worldview.md",
+    "IP_entity/90-Templates/TEMPLATE-Values.md",
+    "IP_entity/90-Templates/TEMPLATE-Persona.md",
+    "IP_entity/60-IP-Identity/README.md",
+    "IP_entity/90-Templates",
+    "IP_entity/60-IP-Identity",
+    "IP_entity",
+    "experience_lib/40-Projects/TEMPLATE-Project.md",
+    "experience_lib/25-Assets/README.md",
+    "experience_lib/50-TruthSource/README.md",
+    "experience_lib/20-Cards/灵感卡-20260622-2328-错位营销-表面推玻璃水实则以车圈话题做流量入口.md",
+    "experience_lib/00-Inbox/逆向思维vs两面性.md",
+    "experience_lib/00-Inbox/最狠文案结构-挂羊头卖狗肉.md",
+    "experience_lib/50-TruthSource",
+    "experience_lib/40-Projects",
+    "experience_lib/25-Assets",
+    "experience_lib/20-Cards",
+    "experience_lib/00-Inbox",
+    "cal_lib/20-Cards/校准卡-20260613-1649b-苏格拉底追问原则.md",
+    "CHANGELOG.md",
+    "config/动态真相源准入规则.md",
+    "config/Notion-VideoLoop-Hermes-GitHub边界.md",
+    "config/CAL引用规则.md",
+    "90-Templates/TEMPLATE-Worldview.md",
+    "90-Templates/TEMPLATE-Values.md",
+    "90-Templates/TEMPLATE-Persona.md",
+    "90-Templates/TEMPLATE-Judgment.md",
+    "90-Templates/TEMPLATE-Boundary.md",
+    "60-IP-Identity/README.md",
+    "50-TruthSource/README.md"
   ]
 }
