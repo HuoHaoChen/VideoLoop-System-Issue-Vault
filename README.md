@@ -1,84 +1,78 @@
-# VideoLoop V3.0｜内容判断校准引擎
+# VideoLoop｜系统问题反馈引擎 (SIFE)
 
-> Content Judgment Calibration Engine — 活跃校准引擎 + 长期判断资产库
-
-**VideoLoop｜内容判断校准引擎：通过 P→C→CAL→Meta 结构互锁，把内容发布过程中产生的问题、灵感、误判和真实反馈，校准为可复用的 CAL 尺子、判断资产、失败反模式和边界条件；其中达到 S2/S3 的资产，才被收录进动态真相源。**
-
-它是「内容判断资产训练系统」的核心校准引擎，不是总系统本身；总系统负责训练小白持续逼近爆款判断能力，VideoLoop 负责把每次反馈校准成下一次可复用的判断资产。
+> System Issue Feedback Engine — 以系统自身故障、流程卡点、工具误判和 AI 越权为输入，用「捕获→定级→归因→修复→校准→防再发」闭环，把每次系统问题沉淀为可复用的系统校准卡。
 
 ```
-Notion         → 灵感处理 + 当前运行记录
-VideoLoop      → 活跃校准引擎 + 判断资产沉淀
-Hermes         → 执行代理 + 安全封装 + 卡片触发器
-GitHub         → 规则版本源（schema / prompt / validator / changelog）
+SIFE（系统账号·独立隔离）
+  P → 风险矩阵定级 → C → CAL → Meta → KEDB
+        │（S1 致命一次即升，其余按严重度×频率矩阵）
+        │（方向阀：借想法不搬确定性 + 人工确认）
+        ▼
+  control-plane / 13_rule_candidates / pending → RFC → dry-run → human owner → active
 ```
 
-## 核心机制
+旧名 ~~内容判断校准引擎~~ 已废弃，内容判断职能归还主账号。
 
-**P → C → CAL → Meta** 结构互锁闭环。C 卡必须显式引用 CAL（`calibration_ref`），不可只靠人工自觉。
+## 四库分工
 
-## 三域
+| 库 | 定位 |
+|----|------|
+| Notion（主账号） | 灵感处理 + 当前运行记录 |
+| SIFE（系统账号） | 系统问题反馈引擎 + 故障校准 |
+| Hermes | 执行代理 + 安全封装 |
+| GitHub (control-plane) | 规则版本源（schema / prompt / validator / changelog） |
 
-| Domain | 中文 | 证据强度 | 说明 |
-|--------|------|----------|------|
-| 运营 | Operations | 强 — 可说「有效/已验证」 | 内容发布、数据反馈、用户反应 |
-| 认知 | Cognition | 软 — 最多「方向性」 | 偏见、恐惧、误判、判断习惯 |
-| 系统 | System | 隔离 | 工具、流程、脚本、配置 |
+## 核心闭环
 
-**防腐层：跨域可以借想法，不能借确定性。**
+**P → C → CAL → Meta** 结构互锁。C 卡必须显式引用 CAL（`calibration_ref`），不可只靠人工自觉。
 
-## 卡片类型（8 种 + 新资产容器）
+## 三件真机器
+
+| 机器 | 说明 |
+|------|------|
+| ① 严重度×频率风险矩阵 | S1 致命一次即升，S4 轻微批量处理，替代一刀切 repeat≥3 |
+| ② 4 个真实指标 | 复发率 / MTTD / MTTR / CAL 命中率（月度 Meta 卡读出） |
+| ③ 已知错误库 KEDB | 新问题先查库，命中则 repeat_count+1 自动套矩阵 |
+
+## 卡型（仅系统域）
 
 | 类型 | 命令 | 用途 |
-|:---|:---|:---|
-| 问题卡 | `problem` | 捕获问题 — 什么不对 |
-| 修改卡 | `change` | 设计方案 — 怎么改（涉及判断校准必须带 `calibration_ref`） |
-| 校准卡 | `calibration` | 定义标尺 —「有效」是什么意思 |
-| 元卡 | `meta` | 月度原则复盘 |
-| 灵感卡 | `inspiration` | 捕获原始洞察 |
-| 人格卡 | `persona` | 定义你的人格侧面 |
-| 价值观卡 | `values` | 定义你的核心价值观 |
-| 世界观卡 | `worldview` | 定义你解释世界的核心模型 |
-
-**新资产类型（通过 `asset_type` 字段扩展承载，30 条验证后再决定是否独立卡型）：**
-
-| asset_type | 用途 |
-|:---|:---|
-| `user_pain_hypothesis` | 用户困境假设 |
-| `counterintuitive_judgment` | 反常识判断 |
-| `boundary_condition` | 边界条件 |
-| `failure_antipattern` | 失败反模式 |
+|------|------|------|
+| 系统问题卡 | `problem` | 捕获系统故障 — 现象+触发+证据，含 severity 定级 |
+| 系统修复卡 | `change` | 设计方案 — 怎么改，judgment_change 必须带 calibration_ref |
+| 系统校准卡 | `calibration` | 沉淀系统校准 — 含 hit_count 命中计数 |
+| 月度元卡 | `meta` | 读出 4 指标 + 复查 KEDB |
 
 ## 目录结构
 
 ```
-VideoLoop/
-├── 00-Inbox/          # 降级后备入口（Notion 不可用时的原始捕获）
+系统问题反馈引擎/
 ├── 10-Principles/     # 核心原则
-├── 20-Cards/          # 活跃卡片库（P / C / CAL / Meta / INS / PER / VAL / WV）
-├── 25-Assets/         # 内容判断资产沉淀（用户困境 / 反常识 / 边界 / 反模式）
-├── 30-Dashboards/     # 看板
-├── 40-Projects/       # 项目索引
-├── 50-TruthSource/    # 动态真相源（只引用已校验资产，S2/S3 准入）
-├── 60-IP-Identity/    # IP 实体层（人格 / 价值观 / 世界观）
-├── 90-Templates/      # 模板
+├── 13_rule_candidates/# 规则候选池（方向阀入口）
+├── 20-Cards/          # 活跃卡片库（P / C / CAL / M）
+├── 30-Dashboards/     # 系统域看板
+├── 90-Templates/      # 系统域模板
 ├── config/            # 配置与防腐层
+├── hermes-v2/         # 防瞎编测试套件
 ├── scripts/           # 自动化脚本
-└── hermes-v2/         # 安全封装层（防 AI 瞎编）
+├── schema.json        # 卡片 Schema (v3.1.1)
+└── known_error_db.json# 已知错误库 KEDB
 ```
 
 ## 命令
 
-```
+```bash
 建卡: python scripts/new_card.py problem "标题"
 建卡: python scripts/new_card.py change "标题"
 建卡: python scripts/new_card.py calibration "标题"
 建卡: python scripts/new_card.py meta "标题"
-建卡: python scripts/new_card.py inspiration "标题"
-建卡: python scripts/new_card.py persona "人格侧面名"
-建卡: python scripts/new_card.py values "价值观名"
-建卡: python scripts/new_card.py worldview "世界观名"
 校验: python scripts/validate_loop.py .
-自检: python scripts/validate_loop.py --selftest
 备份: python scripts/backup.py
 ```
+
+## 边界
+
+- 只存系统问题，不存运营/认知域内容（已纯化至主账号）
+- 系统问题永不直接改 active 规则
+- 升 rule_candidate 均经人工确认 + 方向阀
+- 本库独立于 control-plane / runtime-export / knowledge-vault
