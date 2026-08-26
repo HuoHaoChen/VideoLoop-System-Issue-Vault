@@ -36,3 +36,6 @@ Desktop.ini
 
 # --- Hermes runtime artifacts ---
 .hermes/
+
+# --- Obsidian UI state (per-machine) ---
+.obsidian/workspace.json
