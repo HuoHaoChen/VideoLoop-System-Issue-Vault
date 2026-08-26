@@ -89,3 +89,13 @@ GitHub         → 规则版本源（schema / prompt / validator / changelog）
 ### VideoLoop → GitHub
 - schema.json 变更提交到 GitHub
 - 规则变更走 CHANGELOG + release log
+
+## V3.2 扩展（2026-08-26）：DSH / GPT / Codex 接入
+
+| 工具 | 定位 | 接入通道 |
+|------|------|---------|
+| DSH (DeepSeek Harness) | 多会话执行代理 | 直接跑 `new_card.py --tool dsh` |
+| Codex | 工程执行代理 | 直接跑 `new_card.py --tool codex` |
+| GPT (ChatGPT) | 对话顾问（无 shell） | 人肉快速投递 `00-Inbox/`，`source_tool: gpt` |
+
+四工具的问题与解决记录统一进入本引擎，遵循既有 P→C→CAL→Meta 闭环与裁判独立/方向阀规则。详见 `config/四工具反馈接入协议.md`（唯一事实源）。

@@ -1,6 +1,11 @@
 {
-  "version": "3.1.1",
+  "version": "3.2.0",
   "changelog": [
+    {
+      "version": "3.2.0",
+      "date": "2026-08-26",
+      "changes": "四工具统一接入（DSH/GPT/Codex/Hermes）：problem/change/calibration 新增可选字段 source_tool（hermes/codex/dsh/gpt/human/other）；problem 新增可选字段 ke_ref（KEDB 命中回指）。新增 scripts/kedb.py（先查库）与 scripts/ingest.py（00-Inbox 投递→建卡，KEDB 去重）。new_card.py 支持 --tool。新增 30-Dashboards/四工具覆盖看板.md 与 config/四工具反馈接入协议.md。"
+    },
     {
       "version": "3.1.1",
       "date": "2026-07-02",
@@ -140,7 +145,9 @@
       "boundary_condition",
       "prediction",
       "prediction_confidence",
-      "detected_at"
+      "detected_at",
+      "source_tool",
+      "ke_ref"
     ],
     "change": [
       "cal_scan_done",
@@ -150,7 +157,8 @@
       "asset_type",
       "calibration_ref",
       "confidence_level",
-      "resolved_at"
+      "resolved_at",
+      "source_tool"
     ],
     "calibration": [
       "inspiration_ref",
@@ -158,7 +166,8 @@
       "confidence_level",
       "applicable_conditions",
       "expiry_conditions",
-      "hit_count"
+      "hit_count",
+      "source_tool"
     ],
     "meta": [
       "asset_type",
@@ -221,7 +230,8 @@
       "asset_type": "enum · judgment_change / operational_change / user_pain_hypothesis / counterintuitive_judgment / boundary_condition / failure_antipattern",
       "calibration_ref": "string · CAL-ID · asset_type=judgment_change 时必填",
       "confidence_level": "enum · S0/S1/S2/S3/Retired",
-      "resolved_at": "datetime · ISO 8601 · C 卡结案时间，用于计算 MTTR（Mean Time To Repair）"
+      "resolved_at": "datetime · ISO 8601 · C 卡结案时间，用于计算 MTTR（Mean Time To Repair）",
+      "source_tool": "enum · hermes / codex / dsh / gpt / human / other · 提出此修复的工具来源。默认 human。"
     },
     "calibration": {
       "inspiration_ref": "relation · 可选，CAL 卡回指来源灵感 id（补全溯源链）",
@@ -229,7 +239,8 @@
       "confidence_level": "enum · S0/S1/S2/S3/Retired",
       "applicable_conditions": "string · 适用条件 — 这条尺子在什么场景下有效",
       "expiry_conditions": "string · 失效条件 — 什么情况下这条尺子应该退役",
-      "hit_count": "int · CAL 命中计数 — 这条 CAL 实际拦住下次复发的次数，用于计算 CAL 命中率；每次 KEDB 匹配命中时 +1"
+      "hit_count": "int · CAL 命中计数 — 这条 CAL 实际拦住下次复发的次数，用于计算 CAL 命中率；每次 KEDB 匹配命中时 +1",
+      "source_tool": "enum · hermes / codex / dsh / gpt / human / other · 沉淀此校准的工具来源。默认 human。"
     },
     "problem": {
       "asset_type": "enum · user_pain_hypothesis / counterintuitive_judgment / boundary_condition / failure_antipattern",
@@ -239,7 +250,9 @@
       "boundary_condition": "string · 适用/失效边界条件",
       "prediction": "string · 发布前预测",
       "prediction_confidence": "int · 预测信心分 1-5",
-      "detected_at": "datetime · ISO 8601 · 问题实际发生的时间（≠ created_at），用于计算 MTTD（Mean Time To Detect）"
+      "detected_at": "datetime · ISO 8601 · 问题实际发生的时间（≠ created_at），用于计算 MTTD（Mean Time To Detect）",
+      "source_tool": "enum · hermes / codex / dsh / gpt / human / other · 投递此卡的工具来源（哪个工具遇到/上报）。human=人工记录；gpt=ChatGPT 结论经人确认后投递。默认 human。",
+      "ke_ref": "string · KE-xxx · 指向 known_error_db.json 命中的已知错误条目。命中 KEDB 时必须回指（新问题先查库，复发不重复建卡）。"
     },
     "inspiration": {
       "id": "string · 唯一编号",

@@ -15,6 +15,7 @@ calibrated: false
 calibration_ref: 
 process_captured: false
 recorded_by: hermes-A
+source_tool: hermes
 evaluator: 第二裁判
 blind: true
 observe_window: 7d

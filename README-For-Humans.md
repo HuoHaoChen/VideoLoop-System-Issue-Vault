@@ -39,6 +39,10 @@ cd ~/Desktop/系统问题反馈引擎
 # 1. 发现系统故障 → 建问题卡
 python3 scripts/new_card.py problem "故障标题"
 
+# 1.5 建卡前先查已知错误库（新铁律）
+python3 scripts/kedb.py check "症状关键词"
+# 命中 = 复发，别重复建卡；无命中才是新问题
+
 # 2. 打开文件，填 severity + 症状 + 触发条件
 
 # 3. 设计方案 → 建修改卡
@@ -52,6 +56,10 @@ python3 scripts/new_card.py calibration "标尺名称"
 
 # 6. 月末体检
 # 建元卡，读出 4 指标
+
+# —— 四工具快速投递（DSH / GPT / Codex / Hermes 通用）——
+# 把 TEMPLATE-快速投递.md 复制到 00-Inbox/，填 5 行，然后：
+python3 scripts/ingest.py            # 自动 KEDB 查重 → 建 P 卡
 ```
 
 ## 三个铁律
@@ -65,5 +73,14 @@ python3 scripts/new_card.py calibration "标尺名称"
 - `config/` — 三域说明、防腐层、CAL 引用规则
 - `10-Principles/` — 系统核心原则
 - `hermes-v2/` — Hermes 防瞎编验收测试套件
-- `schema.json` — 卡片字段定义 (v3.1.1)
+- `schema.json` — 卡片字段定义 (v3.2.0)
 - `known_error_db.json` — 已知错误库
+
+## 四工具接入（V3.2 新增）
+
+DSH、GPT、Codex、Hermes 四个工具的问题与解决记录都要进这里：
+
+- 有命令行的工具（DSH / Codex / Hermes）：`new_card.py ... --tool <工具名>`
+- ChatGPT 没有命令行：把结论粘成快速投递放进 `00-Inbox/`，你跑一下 `ingest.py`
+- 每张新卡带 `source_tool`，`30-Dashboards/四工具覆盖看板.md` 能看到四个工具各投了多少
+- 规则全文：`config/四工具反馈接入协议.md`

@@ -8,6 +8,7 @@ sample_size:
 reliability_note: n 过小时只报方向，禁止写统计显著
 validity_note: 评分与真实热度方向是否一致
 status: 进行中
+source_tool: hermes
 created: date
 tags: [calibration]
 ---

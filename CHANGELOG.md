@@ -1,3 +1,15 @@
+## 3.2.0 (2026-08-26) — 四工具统一接入
+- 定位扩展：DSH / GPT / Codex / Hermes 四工具的问题与解决记录统一进入本引擎
+- problem/change/calibration 新增可选字段 source_tool（hermes/codex/dsh/gpt/human/other）
+- problem 新增可选字段 ke_ref（KEDB 命中回指，复发先查库不重复建卡）
+- 新增 scripts/kedb.py：KEDB 模糊查库（分词重叠匹配 + 复发升级提示）
+- 新增 scripts/ingest.py：00-Inbox 快速投递 → KEDB 去重 → 自动建卡
+- new_card.py 新增 --tool 参数（默认 human），自动写 source_tool 与 recorded_by 身份
+- validate_loop.py 新增 source_tool 缺失告警（2026-08-26 后新卡生效，旧卡豁免）
+- 新增 30-Dashboards/四工具覆盖看板.md；修复 5 个被 obsidian-git 冲突损坏的看板
+- 新增 config/四工具反馈接入协议.md（四工具唯一事实源）；00-Inbox/ 投递目录
+- known_error_db.json 升 1.1.0：全部条目补 source_tool
+
 # CHANGELOG
 
 ## 3.1.1 (2026-07-02) — SIFE 迁库

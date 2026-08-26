@@ -4,6 +4,7 @@
 # 用法: python validate_loop.py [vault路径]   或   python validate_loop.py --selftest
 # VideoLoop V2.3 — Tabbit 修复版 2026-06-18
 # 修复内容: M7(schema缺失静默) C6(待分类永不告警) M3(due日期格式静默跳过)
+# V3.2 (2026-08-26) 四工具接入: source_tool 缺失/非法告警（旧卡豁免）+ ke_ref 格式校验
 import sys, os, re, json, glob, datetime
 
 ROOT = "."
@@ -160,6 +161,21 @@ def run(root):
                 except Exception:
                     pass
 
+        # ── V3.2: 四工具接入 — source_tool / ke_ref 校验（旧卡豁免）──
+        if t in ("problem", "change", "calibration"):
+            created = str(fm.get("created") or "")
+            st = fm.get("source_tool")
+            if not st and created >= "2026-08-26":
+                warns.append("[source_tool缺失] " + rel
+                             + " 新卡缺 source_tool（2026-08-26 起新卡必填）")
+            if st and st not in ("hermes", "codex", "dsh", "gpt", "human", "other"):
+                warns.append("[source_tool非法] " + rel
+                             + " source_tool=" + str(st))
+            kr = fm.get("ke_ref")
+            if kr and not re.match(r"^KE-\d{3}$", str(kr)):
+                warns.append("[ke_ref格式] " + rel
+                             + " ke_ref=" + str(kr) + " 应为 KE-xxx")
+
     for w in warns:
         print("WARN", w)
     for e in errors:
@@ -187,11 +203,24 @@ def selftest():
                       "process_captured: true","baseline_window: x",
                       "minimum_effect: x","recorded_by: a","evaluator: b","---"])
     open(os.path.join(d, "20-Cards", "bad2.md"), "w", encoding="utf-8").write(bad2)
+    good3 = "\n".join(["---", "id: C-test3", "type: change", "title: 测试", "domain: 系统",
+                       "status: 设计中", "verdict: 待校准", "calibrated: false",
+                       "process_captured: false", "recorded_by: a", "evaluator: b",
+                       "created: 2026-08-26", "---"])
+    open(os.path.join(d, "20-Cards", "good3.md"), "w", encoding="utf-8").write(good3)
     print("自检·方向阀：另用一张 运营卡借认知洞见却声称已验证 的卡测试——")
     print("自检：用一张同时违反 校准/留痕/裁判独立/因果/软领域显著 的卡测试——")
-    rc = run(d)
+    print("自检·source_tool：检测 2026-08-26 后新卡缺 source_tool 是否告警——")
+    import io, contextlib
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        rc = run(d)
+    out = buf.getvalue()
+    print(out, end="")
+    ok_warn = "source_tool缺失" in out
     print("自检结果：", "通过(成功拓出违规)" if rc == 1 else "异常(未拓出，校验器可能坏了)")
-    return 0 if rc == 1 else 2
+    print("自检结果：", "通过(source_tool 已告警)" if ok_warn else "异常(source_tool 未告警)")
+    return 0 if (rc == 1 and ok_warn) else 2
 
 if __name__ == "__main__":
     if "--selftest" in sys.argv:
