@@ -1,6 +1,6 @@
-# VideoLoop｜系统问题反馈引擎 (SIFE)
+# VideoLoop｜统一问题反馈引擎 (SIFE v4)
 
-> System Issue Feedback Engine — 以系统自身故障、流程卡点、工具误判和 AI 越权为输入，用「捕获→定级→归因→修复→校准→防再发」闭环，把每次系统问题沉淀为可复用的系统校准卡。
+> 统一问题反馈引擎 — 以「AI/智能体使用中的系统故障、工具误判、越权与流程卡点」为输入（工作域待确认），用「捕获→查库→定级→修复→结案→防再发」闭环，把每次问题沉淀为「问题 + 解法」对。解决方案优先，30 秒记录，解法为动态真相源。
 
 ```
 SIFE（系统账号·独立隔离）
@@ -38,7 +38,7 @@ SIFE（系统账号·独立隔离）
 
 | 类型 | 命令 | 用途 |
 |------|------|------|
-| 系统问题卡 | `problem` | 捕获系统故障 — 现象+触发+证据，含 severity 定级 |
+| 问题卡 | `problem` | 捕获问题与解法 — 现象+触发+证据+solution（解决方案优先，动态真相源） |
 | 系统修复卡 | `change` | 设计方案 — 怎么改，judgment_change 必须带 calibration_ref |
 | 系统校准卡 | `calibration` | 沉淀系统校准 — 含 hit_count 命中计数 |
 | 月度元卡 | `meta` | 读出 4 指标 + 复查 KEDB |
@@ -62,6 +62,10 @@ SIFE（系统账号·独立隔离）
 ## 命令
 
 ```bash
+快速建卡: python scripts/ticket.py "标题" --症状 "..." --解决 "..." --域 系统 --工具 dsh
+结案:     python scripts/ticket.py solve <ID> "解法"
+验证:     python scripts/ticket.py verify <ID> 有效|无效
+积压:     python scripts/ticket.py list --待解决
 建卡: python scripts/new_card.py problem "标题"
 建卡: python scripts/new_card.py change "标题"
 建卡: python scripts/new_card.py calibration "标题"

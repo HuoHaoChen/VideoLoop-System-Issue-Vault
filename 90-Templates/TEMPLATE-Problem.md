@@ -12,6 +12,11 @@ due:
 owner: huohaochen
 recorded_by: hermes-A
 source_tool: hermes
+solution: 
+solution_status: 待解决
+solution_hits: 0
+solution_level: 待验证
+resolved_at:
 tags: [problem]
 ---
 
@@ -23,6 +28,13 @@ tags: [problem]
 
 > [!question]+ 结论
 > 一句话讲清楚：发生了什么，要做什么决定。
+
+---
+
+## ✅ 解决（解决方案优先）
+
+（一句话解法；不知道就写「未定位」并保持 solution_status: 待解决）
+（解法是动态真相源：待验证→已验证/被推翻，永远不是第一真相源。）
 
 ---
 

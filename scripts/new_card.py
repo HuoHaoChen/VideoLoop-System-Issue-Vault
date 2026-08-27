@@ -3,6 +3,7 @@
 # 一键建卡: python new_card.py <type> "标题" [--tool hermes|codex|dsh|gpt|human|other]
 # 支持类型: problem / change / calibration / meta / inspiration / persona / values / worldview
 # VideoLoop SIFE V3.2 — 2026-08-26 四工具接入（--tool → source_tool + recorded_by 身份）
+# V4 (2026-08-27) problem 卡新增 solution/solution_status/resolved_at 字段。
 # 历史修复: C1(calibration body双写) C2(meta缺period) C3(inspiration缺失) M5(文件名安全) L1(ID碰撞)
 # 2026-06-21 新增: persona / values / worldview 三类 IP 实体
 import sys, os, re, glob, datetime
@@ -58,6 +59,11 @@ def build_card(KIND, TITLE, TOOL="human", extra=None):
         a("domain: 待分类"); a("ptype: 待分类"); a("level: 待定"); a("status: 未处理")
         a("process_captured: false"); a("recorded_by: " + RECORDER[TOOL])
         a("source_tool: " + TOOL)
+        a("solution: ")
+        a("solution_status: 待解决")
+        a("solution_hits: 0")
+        a("solution_level: 待验证")
+        a("resolved_at: ")
         a("due: "); a("owner: huohaochen")
 
     elif KIND == "change":

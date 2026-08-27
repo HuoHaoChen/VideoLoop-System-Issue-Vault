@@ -5,6 +5,7 @@
 # VideoLoop V2.3 — Tabbit 修复版 2026-06-18
 # 修复内容: M7(schema缺失静默) C6(待分类永不告警) M3(due日期格式静默跳过)
 # V3.2 (2026-08-26) 四工具接入: source_tool 缺失/非法告警（旧卡豁免）+ ke_ref 格式校验
+# V4 (2026-08-27) 解决优先门控。
 import sys, os, re, json, glob, datetime
 
 ROOT = "."
@@ -176,6 +177,17 @@ def run(root):
                 warns.append("[ke_ref格式] " + rel
                              + " ke_ref=" + str(kr) + " 应为 KE-xxx")
 
+        # ── V4: problem 解决优先门控 ───────────────────────────────
+        if t == "problem":
+            if fm.get("status") == "已解决" and not fm.get("solution"):
+                warns.append("[解决缺失] " + rel + " 已解决但 solution 为空（解决方案优先门控）")
+            ss = fm.get("solution_status")
+            if ss and ss not in ("待解决", "已解决", "规避中", "放弃"):
+                warns.append("[solution_status非法] " + rel + " solution_status=" + str(ss))
+        sl = fm.get("solution_level")
+        if sl and sl not in ("待验证", "已验证", "被推翻"):
+            warns.append("[solution_level非法] " + rel + " solution_level=" + str(sl))
+
     for w in warns:
         print("WARN", w)
     for e in errors:
@@ -208,6 +220,10 @@ def selftest():
                        "process_captured: false", "recorded_by: a", "evaluator: b",
                        "created: 2026-08-26", "---"])
     open(os.path.join(d, "20-Cards", "good3.md"), "w", encoding="utf-8").write(good3)
+    good4 = "\n".join(["---", "id: P-test4", "type: problem", "title: 测试", "domain: 系统",
+                       "status: 已解决", "process_captured: true", "recorded_by: a",
+                       "source_tool: dsh", "created: 2026-08-26", "---"])
+    open(os.path.join(d, "20-Cards", "good4.md"), "w", encoding="utf-8").write(good4)
     print("自检·方向阀：另用一张 运营卡借认知洞见却声称已验证 的卡测试——")
     print("自检：用一张同时违反 校准/留痕/裁判独立/因果/软领域显著 的卡测试——")
     print("自检·source_tool：检测 2026-08-26 后新卡缺 source_tool 是否告警——")
@@ -218,9 +234,11 @@ def selftest():
     out = buf.getvalue()
     print(out, end="")
     ok_warn = "source_tool缺失" in out
+    ok_solution = "解决缺失" in out
     print("自检结果：", "通过(成功拓出违规)" if rc == 1 else "异常(未拓出，校验器可能坏了)")
     print("自检结果：", "通过(source_tool 已告警)" if ok_warn else "异常(source_tool 未告警)")
-    return 0 if (rc == 1 and ok_warn) else 2
+    print("自检结果：", "通过(解决缺失 已告警)" if ok_solution else "异常(解决缺失 未告警)")
+    return 0 if (rc == 1 and ok_warn and ok_solution) else 2
 
 if __name__ == "__main__":
     if "--selftest" in sys.argv:

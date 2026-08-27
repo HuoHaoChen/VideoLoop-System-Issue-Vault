@@ -53,6 +53,22 @@ def pick_title(fm, body):
         return line[:60]
     return "未命名投递"
 
+def extract_solution(body):
+    """提取“## 解决记录”小节中、下一二级标题前的非空文本。"""
+    solution_lines = []
+    in_solution = False
+    for line in body.splitlines():
+        if not in_solution:
+            if line.startswith("## 解决记录"):
+                in_solution = True
+            continue
+        if line.startswith("## "):
+            break
+        text = line.strip()
+        if text:
+            solution_lines.append(text)
+    return " ".join(solution_lines)
+
 def find_best_match(text):
     q = KEDB.tokenize(text)
     db = KEDB.load_db()
@@ -94,6 +110,7 @@ def process_file(fp, dry):
         tool = "human"
     title    = pick_title(fm, body)
     severity = fm.get("severity") or "待定"
+    solution = extract_solution(body)
     ke, score = find_best_match(title + "\n" + body)
     matched = ke is not None and score >= MATCH_MIN
     if dry:
@@ -103,15 +120,26 @@ def process_file(fp, dry):
         return
     extra = {"severity": severity,
              "detected_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M")}
+    if solution:
+        extra["solution"] = solution
+        extra["solution_status"] = "已解决"
     if matched:
         extra["ke_ref"] = ke["known_error_id"]
     out, cid = NEW_CARD.build_card("problem", title, tool, extra)
+    if solution:
+        with open(out, encoding="utf-8") as f:
+            card = f.read()
+        card = card.replace("status: 未处理", "status: 已解决", 1)
+        card = card.replace("process_captured: false", "process_captured: true", 1)
+        with open(out, "w", encoding="utf-8") as f:
+            f.write(card)
     if matched:
         bump_kedb(ke, cid)
         print("命中 KEDB %s → repeat_count+1；P 卡 %s 已挂 ke_ref" % (ke["known_error_id"], cid))
     else:
         print("KEDB 无命中（新问题）→ 已建 P 卡 %s；若为已知顽疾，人工确认后登记 KEDB" % cid)
     print("已创建:", out)
+    print("解决状态:", "已解决" if solution else "待解决")
     os.makedirs(PROCESSED, exist_ok=True)
     dest = os.path.join(PROCESSED,
                         datetime.datetime.now().strftime("%Y%m%d-%H%M%S")

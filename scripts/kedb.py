@@ -2,13 +2,14 @@
 # -*- coding: utf-8 -*-
 # KEDB 已知错误库查库工具 — SIFE 铁律：新问题先查库，命中即复发，走 repeat_count 流程，不重复建卡
 # 用法:
-#   python kedb.py check "症状关键词"        # 模糊查库，按得分排序
-#   python kedb.py check "症状" --top 3      # 只看前 3 条
-#   python kedb.py list                      # 全部条目一览
+#   python3 scripts/kedb.py check "症状关键词" [--域 系统|工作|认知] [--top N]
+#   python3 scripts/kedb.py list
+#   python3 scripts/kedb.py matrix
 import sys, os, re, json
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DB   = os.path.join(ROOT, "known_error_db.json")
+DOMAIN_MAP = {"系统": "系统", "工作": "运营", "认知": "认知"}
 
 def load_db():
     if not os.path.exists(DB):
@@ -39,11 +40,24 @@ def score_entry(query_toks, entry):
             hit.add(q)
     return len(hit), hit
 
-def check(query, top=0):
+def entry_domain(entry):
+    """返回条目所属域；历史条目没有 domain 时按「系统」处理。"""
+    return entry.get("domain") or "系统"
+
+def repeat_count(entry):
+    """读取复发次数，异常值按 0 处理，避免统计命令中断。"""
+    try:
+        return int(entry.get("repeat_count", 0))
+    except (TypeError, ValueError):
+        return 0
+
+def check(query, top=0, domain=None):
     db = load_db()
     q = tokenize(query)
     scored = []
     for e in db["entries"]:
+        if domain and entry_domain(e) != domain:
+            continue
         s, _ = score_entry(q, e)
         if s > 0:
             scored.append((s, e))
@@ -55,10 +69,13 @@ def check(query, top=0):
     for s, e in rows:
         print("KE %s  [severity=%s]  得分=%d  repeat=%d  [%s]" % (
             e.get("known_error_id"), e.get("severity"), s,
-            int(e.get("repeat_count", 0)), e.get("永久修复状态", "-")))
+            repeat_count(e), e.get("永久修复状态", "-")))
+        print("  方案: " + str(e.get("workaround", ""))[:120])
+        print("  解法可信度: %s（事实验证有效 %s 次）%s" % (
+            e.get("solution_level", "待验证"), e.get("solution_hits", 0),
+            " ⚠️ 已被推翻，禁止推荐" if e.get("solution_level") == "被推翻" else ""))
         print("  症状: " + str(e.get("症状", ""))[:120])
         print("  根因: " + str(e.get("根因", ""))[:120])
-        print("  方案: " + str(e.get("workaround", ""))[:120])
         print("  关联: P=%s C=%s  来源=%s" % (e.get("关联", {}).get("P"),
               e.get("关联", {}).get("C"), e.get("source_tool", "-")))
         print()
@@ -73,10 +90,77 @@ def list_entries():
     db = load_db()
     for e in db["entries"]:
         rel = e.get("关联", {})
-        print("KE %s [%s] repeat=%d %s | P=%s C=%s | %s" % (
+        print("KE %s [%s] domain=%s repeat=%d %s | P=%s C=%s | %s" % (
             e.get("known_error_id"), e.get("severity"),
-            int(e.get("repeat_count", 0)), e.get("永久修复状态", "-"),
+            entry_domain(e), repeat_count(e), e.get("永久修复状态", "-"),
             rel.get("P"), rel.get("C"), str(e.get("症状", ""))[:60]))
+
+def matrix():
+    """按完全相同的根因分簇，展示跨工具复发与工具分布。"""
+    db = load_db()
+    clusters = {}
+    tool_counts = {}
+    for entry in db["entries"]:
+        root_cause = str(entry.get("根因", ""))
+        clusters.setdefault(root_cause, []).append(entry)
+        source_tool = str(entry.get("source_tool") or "-")
+        tool_counts[source_tool] = tool_counts.get(source_tool, 0) + 1
+
+    cross_tool_cluster_count = 0
+    for root_cause, entries in clusters.items():
+        source_tools = sorted({str(entry.get("source_tool") or "-") for entry in entries})
+        is_cross_tool = len(source_tools) >= 2
+        if is_cross_tool:
+            cross_tool_cluster_count += 1
+            print("⚠️ 跨工具复发")
+        print("根因: " + root_cause)
+        print("来源工具: " + ", ".join(source_tools))
+        print("复发次数: %d" % sum(repeat_count(entry) for entry in entries))
+        print("条目: " + ", ".join(
+            "%s(%s)" % (entry.get("known_error_id", "-"), entry.get("severity", "-"))
+            for entry in entries))
+        print()
+
+    tool_summary = ", ".join(
+        "%s=%d" % (tool, tool_counts[tool]) for tool in sorted(tool_counts))
+    print("汇总: 总簇数=%d，跨工具簇数=%d，各工具条目数=%s" % (
+        len(clusters), cross_tool_cluster_count, tool_summary or "无"))
+
+def parse_check_args(argv):
+    """解析 check 参数，返回 (query, top, domain) 或抛出 ValueError。"""
+    if not argv:
+        raise ValueError("缺少症状关键词")
+
+    query = argv[0]
+    top = 0
+    domain = None
+    index = 1
+    while index < len(argv):
+        option = argv[index]
+        if option == "--top":
+            if index + 1 >= len(argv):
+                raise ValueError("--top 需要 N")
+            try:
+                top = int(argv[index + 1])
+            except ValueError:
+                raise ValueError("--top 的 N 必须是整数")
+            index += 2
+        elif option == "--域":
+            if index + 1 >= len(argv):
+                raise ValueError("--域 需要 系统、工作或认知")
+            requested_domain = argv[index + 1]
+            if requested_domain not in DOMAIN_MAP:
+                raise ValueError("--域 仅支持 系统、工作或认知")
+            domain = DOMAIN_MAP[requested_domain]
+            index += 2
+        else:
+            raise ValueError("未知参数: %s" % option)
+    return query, top, domain
+
+def print_usage(file=sys.stderr):
+    print('用法: python3 scripts/kedb.py check "症状关键词" [--域 系统|工作|认知] [--top N]', file=file)
+    print('      python3 scripts/kedb.py list', file=file)
+    print('      python3 scripts/kedb.py matrix', file=file)
 
 def main():
     argv = sys.argv[1:]
@@ -84,21 +168,21 @@ def main():
         list_entries()
         return 0
     if argv[0] == "check":
-        query = argv[1] if len(argv) > 1 else ""
-        top = 0
-        if "--top" in argv:
-            i = argv.index("--top")
-            if i + 1 < len(argv):
-                try:
-                    top = int(argv[i + 1])
-                except ValueError:
-                    top = 0
-        if not query.strip():
-            print('用法: python kedb.py check "症状关键词"', file=sys.stderr)
+        try:
+            query, top, domain = parse_check_args(argv[1:])
+        except ValueError as error:
+            print("参数错误: %s" % error, file=sys.stderr)
+            print_usage()
             return 2
-        check(query, top)
+        if not query.strip():
+            print_usage()
+            return 2
+        check(query, top, domain)
         return 0
-    print('用法: python kedb.py check "症状" | list', file=sys.stderr)
+    if argv[0] == "matrix" and len(argv) == 1:
+        matrix()
+        return 0
+    print_usage()
     return 2
 
 if __name__ == "__main__":

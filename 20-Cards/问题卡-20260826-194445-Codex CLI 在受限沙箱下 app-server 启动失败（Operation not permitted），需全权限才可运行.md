@@ -2,11 +2,14 @@
 id: P-20260826-194445
 type: problem
 title: Codex CLI 在受限沙箱下 app-server 启动失败（Operation not permitted），需全权限才可运行
+solution: 以 danger-full-access 运行 Codex 任务；提示词任务书照常，产出路径不变
+solution_status: 已解决
 domain: 系统
 ptype: 工具失效
 level: 重要
 status: 已解决
 process_captured: true
+resolved_at: 2026-08-27 15:02
 recorded_by: dsh-A
 source_tool: dsh
 due: 2026-08-26

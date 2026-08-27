@@ -1,3 +1,12 @@
+## 4.0.0 (2026-08-27) — 统一问题反馈引擎 v4
+- 定位升级：系统故障 + 工作问题统一入口（解决方案优先，30 秒闭环）
+- problem 新增 solution / solution_status / resolved_at 字段
+- ptype 新增工作子类词表（选题/脚本/拍摄/剪辑/发布/平台规则/投放/复盘/流程/工具/其他）
+- known_error_db 条目增加 domain 字段（1.2.0）
+- 新增 scripts/ticket.py 统一入口（后续提交落地）
+- kedb.py 分域 + matrix 跨工具聚类（后续提交落地）
+- ticket.py verify 子命令：解法动态真相源（待验证→已验证/被推翻 + solution_hits 信誉分，同步 KEDB）
+
 ## 3.2.0 (2026-08-26) — 四工具统一接入
 - 定位扩展：DSH / GPT / Codex / Hermes 四工具的问题与解决记录统一进入本引擎
 - problem/change/calibration 新增可选字段 source_tool（hermes/codex/dsh/gpt/human/other）

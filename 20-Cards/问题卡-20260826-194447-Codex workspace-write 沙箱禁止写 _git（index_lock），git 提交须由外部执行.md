@@ -2,11 +2,14 @@
 id: P-20260826-194447
 type: problem
 title: Codex workspace-write 沙箱禁止写 .git（index.lock），git 提交须由外部执行
+solution: git 提交一律由外部执行；任务书明确写不要执行任何 git 命令
+solution_status: 已解决
 domain: 系统
 ptype: 配置坑
 level: 一般
 status: 已解决
 process_captured: true
+resolved_at: 2026-08-27 15:02
 recorded_by: dsh-A
 source_tool: dsh
 due: 2026-08-26

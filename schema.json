@@ -1,6 +1,11 @@
 {
-  "version": "3.2.0",
+  "version": "4.0.0",
   "changelog": [
+    {
+      "version": "4.0.0",
+      "date": "2026-08-27",
+      "changes": "统一问题反馈引擎 v4：problem 新增 solution/solution_status/resolved_at；ptype 扩展工作子类词表；known_error_db 条目增加 domain。解决方案优先 + 30 秒闭环。；解法动态真相源：solution_hits/solution_level + ticket.py verify（AI/智能体范围，工作域待确认）"
+    },
     {
       "version": "3.2.0",
       "date": "2026-08-26",
@@ -46,6 +51,19 @@
     "运营",
     "认知",
     "系统"
+  ],
+  "ptypes": [
+    "选题",
+    "脚本",
+    "拍摄",
+    "剪辑",
+    "发布",
+    "平台规则",
+    "投放",
+    "复盘",
+    "流程",
+    "工具",
+    "其他"
   ],
   "soft_domains": [
     "认知",
@@ -147,7 +165,12 @@
       "prediction_confidence",
       "detected_at",
       "source_tool",
-      "ke_ref"
+      "ke_ref",
+      "solution",
+      "solution_status",
+      "resolved_at",
+      "solution_hits",
+      "solution_level"
     ],
     "change": [
       "cal_scan_done",
@@ -252,7 +275,13 @@
       "prediction_confidence": "int · 预测信心分 1-5",
       "detected_at": "datetime · ISO 8601 · 问题实际发生的时间（≠ created_at），用于计算 MTTD（Mean Time To Detect）",
       "source_tool": "enum · hermes / codex / dsh / gpt / human / other · 投递此卡的工具来源（哪个工具遇到/上报）。human=人工记录；gpt=ChatGPT 结论经人确认后投递。默认 human。",
-      "ke_ref": "string · KE-xxx · 指向 known_error_db.json 命中的已知错误条目。命中 KEDB 时必须回指（新问题先查库，复发不重复建卡）。"
+      "ke_ref": "string · KE-xxx · 指向 known_error_db.json 命中的已知错误条目。命中 KEDB 时必须回指（新问题先查库，复发不重复建卡）。",
+      "solution": "string · 一句话解法（解决方案优先）。status=已解决 时必填，validator 以 WARN 门控。",
+      "solution_status": "enum · 待解决 / 已解决 / 规避中 / 放弃 · 解决状态，默认 待解决。",
+      "resolved_at": "datetime · ISO 8601 · P 卡结案时间，用于计算 MTTR。",
+      "ptype": "enum · 工作问题子类，取值见顶层 ptypes；系统问题用 工具/流程/其他。",
+      "solution_hits": "int · 解法被事实验证有效的次数（ticket.py verify 有效 +1）。动态真相源信誉分。",
+      "solution_level": "enum · 待验证 / 已验证 / 被推翻 · 解法可信度（动态真相源）。永远不是第一真相源，第一真相源=课程方法论。"
     },
     "inspiration": {
       "id": "string · 唯一编号",

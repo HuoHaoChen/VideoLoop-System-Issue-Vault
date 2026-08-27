@@ -36,6 +36,11 @@ S1 走方向阀 → control-plane rule_candidate
 ```bash
 cd ~/Desktop/系统问题反馈引擎
 
+# 0. 30 秒快速建卡（四工具通用）
+python3 scripts/ticket.py "标题" --症状 "..." --解决 "..." --域 系统 --工具 dsh
+# 先查库：python3 scripts/kedb.py check "症状"；命中=复发别重复建卡
+# 解法验证：python3 scripts/ticket.py verify <ID> 有效|无效
+
 # 1. 发现系统故障 → 建问题卡
 python3 scripts/new_card.py problem "故障标题"
 
@@ -67,6 +72,13 @@ python3 scripts/ingest.py            # 自动 KEDB 查重 → 建 P 卡
 1. **先查 KEDB 再建 P 卡** — 同样问题不建重复卡，hit_count+1
 2. **S1 一次即升** — 致命问题不等复发，直接走方向阀
 3. **校准卡要回答「你到底拦住了几次」** — hit_count 是 CAL 唯一硬指标
+
+## 不记清单
+
+1. 一次性笔误（当场改掉且不可复现）不记
+2. 纯情绪、吐槽不记
+3. 无验证信号的工作直觉只进灵感层，不建 P 卡
+4. 工具自报 severity=S1 无效（S1 只能人定）
 
 ## 更多
 
