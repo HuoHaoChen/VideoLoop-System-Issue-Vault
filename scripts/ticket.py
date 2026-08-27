@@ -23,7 +23,7 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CARDS_DIR = os.path.join(ROOT, "20-Cards")
-MATCH_MIN = 3
+MATCH_MIN = 4
 DOMAIN_MAP = {"工作": "运营", "系统": "系统", "认知": "认知"}
 PENDING_STATUSES = {"未处理", "设计中", "执行中", "观察中"}
 

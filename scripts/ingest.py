@@ -13,7 +13,7 @@ ROOT      = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 INBOX     = os.path.join(ROOT, "00-Inbox")
 PROCESSED = os.path.join(INBOX, "processed")
 DB        = os.path.join(ROOT, "known_error_db.json")
-MATCH_MIN = 3   # 查询与 KEDB 条目共享 token 数 ≥ 2 判为命中
+MATCH_MIN = 4   # 查询与 KEDB 条目共享 token 数 ≥ 2 判为命中
 
 def load_module(name, path):
     spec = importlib.util.spec_from_file_location(name, path)
