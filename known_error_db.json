@@ -65,15 +65,19 @@
       "根因": "C-1724 只解决了静态引用记录，未建立动态调用追踪（调用日志 + 命中计数）。",
       "workaround": "人工在 Meta 卡中手工统计。",
       "永久修复状态": "已修",
-      "repeat_count": 1,
+      "repeat_count": 2,
       "关联": {
-        "P": "P-20260614-0734",
+        "P": [
+          "P-20260614-0734",
+          "P-20260827-154004"
+        ],
         "C": "C-20260614-0735"
       },
       "source_tool": "human",
       "domain": "系统",
       "solution_hits": 0,
-      "solution_level": "待验证"
+      "solution_level": "待验证",
+      "last_recurrence": "2026-08-27 15:40"
     },
     {
       "file": "问题卡-20260621-133314-VideoLoop 偏问题管理，缺 IP 人格层.md",

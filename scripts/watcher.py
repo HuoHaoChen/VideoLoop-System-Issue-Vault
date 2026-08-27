@@ -180,6 +180,12 @@ def self_report(st, dry):
                 "## 症状\n%s\n\n## 根因\n未定位\n\n## 解决记录\n" % (today(), tail))
     st["err_mark"] = cur
     print("自报：watcher 自身故障已投递 %s" % fn)
+    if not os.environ.get("SIFE_WATCH_ROOT"):
+        try:
+            INGEST = load_module("ingest", os.path.join(ROOT, "scripts", "ingest.py"))
+            INGEST.main()
+        except Exception as ex:
+            print("FAIL 自报入库异常（下轮重试）: %s" % ex)
 
 # ─────────────────────────── 扫描建卡 ───────────────────────────
 
