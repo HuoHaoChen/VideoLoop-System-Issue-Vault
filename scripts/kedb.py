@@ -18,10 +18,14 @@ def load_db():
     with open(DB, encoding="utf-8") as f:
         return json.load(f)
 
+_STOP = {"is","at","of","to","in","on","be","or","and","no","it","we","you","the",
+          "a","an","if","not","this","that","for","with","was","are","but","do","did",
+          "has","had","by","as","so","up","my","me","he","she","they","can","will"}
+
 def tokenize(text):
-    """中英混排分词：英文按字母数字串(≥2)，中文按单字+2字滑窗。"""
+    """中英混排分词：英文按字母数字串(≥2，滤停用词)，中文按单字+2字滑窗。"""
     text = (text or "").lower()
-    toks = set(re.findall(r"[a-z0-9_./-]{2,}", text))
+    toks = set(re.findall(r"[a-z0-9_./-]{2,}", text)) - _STOP
     for seg in re.findall(r"[\u4e00-\u9fff]+", text):
         if len(seg) == 1:
             toks.add(seg)

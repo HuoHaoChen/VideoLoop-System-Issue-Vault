@@ -74,6 +74,7 @@ SIFE（系统账号·独立隔离）
 入库: python scripts/ingest.py            # 00-Inbox 快速投递 → KEDB 查重 → 建 P 卡
 校验: python scripts/validate_loop.py .
 备份: python scripts/backup.py
+守护: python scripts/watcher.py --scan --verify   # launchd 每小时自动跑，人零操作
 ```
 
 ## 边界
@@ -86,3 +87,7 @@ SIFE（系统账号·独立隔离）
 ## 四工具接入 (V3.2)
 
 DSH / GPT / Codex / Hermes 遇到的问题与解决记录统一进入本引擎。新卡带 `source_tool` 字段（hermes/codex/dsh/gpt/human/other），KEDB 复发自动 repeat_count+1 并挂 `ke_ref`。接入协议见 `config/四工具反馈接入协议.md`（唯一事实源），覆盖看板见 `30-Dashboards/四工具覆盖看板.md`。
+
+## 全自动模式 (V4.1)
+
+`scripts/watcher.py` 守护进程（launchd 每小时）：自动扫描工具会话日志捕获问题、自动 KEDB 查重、自动验证解法信誉（复发=被推翻，N 天不复发=已验证）。人零操作，S1 升级除外。详见协议第十一节。

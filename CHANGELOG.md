@@ -1,3 +1,10 @@
+## 4.1.0 (2026-08-27) — 全自动守护
+- 新增 scripts/watcher.py：扫描 Codex/Hermes 会话日志自动捕获问题（真实错误字段提取+签名去重+自动建卡）
+- 解法信誉自动验证：复发=被推翻；N 天不复发=已验证（存活证据），launchd 每小时运行
+- kedb.py tokenize 增加英文停用词、MATCH_MIN 2→3（修英文短查询假命中）
+- ingest/ticket 透传 domain；watcher 投递件命名防同秒覆盖
+- 人零操作；唯一保留人工：S1 升级、KEDB 新条目登记
+
 ## 4.0.0 (2026-08-27) — 统一问题反馈引擎 v4
 - 定位升级：系统故障 + 工作问题统一入口（解决方案优先，30 秒闭环）
 - problem 新增 solution / solution_status / resolved_at 字段

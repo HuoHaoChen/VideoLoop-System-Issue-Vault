@@ -13,7 +13,7 @@ ROOT      = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 INBOX     = os.path.join(ROOT, "00-Inbox")
 PROCESSED = os.path.join(INBOX, "processed")
 DB        = os.path.join(ROOT, "known_error_db.json")
-MATCH_MIN = 2   # 查询与 KEDB 条目共享 token 数 ≥ 2 判为命中
+MATCH_MIN = 3   # 查询与 KEDB 条目共享 token 数 ≥ 2 判为命中
 
 def load_module(name, path):
     spec = importlib.util.spec_from_file_location(name, path)
@@ -120,12 +120,17 @@ def process_file(fp, dry):
         return
     extra = {"severity": severity,
              "detected_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M")}
+    if fm.get("domain") in ("系统", "运营", "认知"):
+        extra["domain"] = fm.get("domain")
     if solution:
         extra["solution"] = solution
         extra["solution_status"] = "已解决"
     if matched:
         extra["ke_ref"] = ke["known_error_id"]
     out, cid = NEW_CARD.build_card("problem", title, tool, extra)
+    if extra.get("domain") not in (None, "", "待分类"):
+        c = open(out, encoding="utf-8").read()
+        open(out, "w", encoding="utf-8").write(c.replace("domain: 待分类\n", "", 1))
     if solution:
         with open(out, encoding="utf-8") as f:
             card = f.read()
