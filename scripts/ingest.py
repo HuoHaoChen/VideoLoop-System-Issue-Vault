@@ -122,6 +122,8 @@ def process_file(fp, dry):
              "detected_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M")}
     if fm.get("domain") in ("系统", "运营", "认知"):
         extra["domain"] = fm.get("domain")
+    if fm.get("sig"):
+        extra["sig"] = fm.get("sig")
     if solution:
         extra["solution"] = solution
         extra["solution_status"] = "已解决"

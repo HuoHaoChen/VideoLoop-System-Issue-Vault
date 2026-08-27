@@ -1,3 +1,9 @@
+## 4.2.0 (2026-08-27) — watcher v2 专业跑通测试
+- watcher v2：证据闭环验证（存活升格/复发降级，sig 签名入库）、self_report 自报故障、--enrich-draft 按需起草、--selftest 8 项跑通测试（临时目录隔离）
+- launchd 加 KeepAlive 看门狗（失败立即重试）+ ProcessType Background
+- 状态文件原子写+限量+损坏自愈；扫描限量；文件名含签名哈希（跨轮次同秒防覆盖）
+- selftest 反向思维失败模式：噪声过滤/幂等/同秒碰撞/损坏自愈/升格/降级 全过（8/8）
+
 ## 4.1.0 (2026-08-27) — 全自动守护
 - 新增 scripts/watcher.py：扫描 Codex/Hermes 会话日志自动捕获问题（真实错误字段提取+签名去重+自动建卡）
 - 解法信誉自动验证：复发=被推翻；N 天不复发=已验证（存活证据），launchd 每小时运行
