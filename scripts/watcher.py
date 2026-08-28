@@ -265,7 +265,7 @@ def cmd_scan(dry, since, max_tickets):
             hashlib.md5(sig.encode("utf-8")).hexdigest()[:8]))
         with open(fn, "w", encoding="utf-8") as f:
             f.write("---\ntype: inbox\nsource_tool: %s\nseverity: 待定\ndomain: 系统\n"
-                    "title: %s\nsig: %s\ncreated: %s\n---\n"
+                    "title: %s\nsig: %s\nauto: true\ncreated: %s\n---\n"
                     "## 症状\n自动捕获自 %s：\n%s\n\n## 根因\n未定位\n\n## 解决记录\n"
                     % (source, sig[:60], sig, today(), fp, snippet))
         print("自动建卡投递: %s (%s)" % (sig[:60], source))

@@ -111,8 +111,11 @@ def process_file(fp, dry):
     title    = pick_title(fm, body)
     severity = fm.get("severity") or "待定"
     solution = extract_solution(body)
-    ke, score = find_best_match(title + "\n" + body)
-    matched = ke is not None and score >= MATCH_MIN
+    if fm.get("auto") == "true":
+        ke, score, matched = None, 0, False
+    else:
+        ke, score = find_best_match(title + "\n" + body)
+        matched = ke is not None and score >= MATCH_MIN
     if dry:
         print("[dry-run] %s → P卡 title=%r tool=%s severity=%s ke=%s" % (
             os.path.basename(fp), title, tool, severity,
