@@ -160,6 +160,55 @@ def scan_hermes(since, hits):
 
 # ─────────────────────────── 自报：watcher 自身故障也要进系统 ───────────────────────────
 
+def scan_marvis(since, hits):
+    """扫描 Marvis 本地会话库（data.db messages 表）中的错误文本。
+    安全设计：库不可读/表结构变更 → 跳过并打印 SKIP，绝不拖垮其他源（防脆）。"""
+    db = os.environ.get("SIFE_WATCH_MARVIS_DB") or os.path.expanduser(
+        "~/.marvis/database/data.db")
+    if not os.path.exists(db):
+        print("SKIP marvis（数据库不存在: %s）" % db)
+        return
+    try:
+        import sqlite3
+        con = sqlite3.connect("file:%s?mode=ro" % db, uri=True, timeout=5)
+        con.execute("PRAGMA query_only=ON")
+        tables = [r[0] for r in con.execute(
+            "SELECT name FROM sqlite_master WHERE type='table'")]
+        if "messages" not in tables:
+            print("SKIP marvis（messages 表缺失，可能升级改库）")
+            con.close()
+            return
+        cols = [r[1] for r in con.execute("PRAGMA table_info(messages)")]
+        need = {"role", "content", "created_at", "tool_name"}
+        if not need.issubset(set(cols)):
+            print("SKIP marvis（messages 表结构变更）")
+            con.close()
+            return
+        cutoff = (datetime.datetime.now() - datetime.timedelta(days=since)).isoformat()
+        rows = con.execute(
+            "SELECT role, content, tool_name, created_at FROM messages "
+            "WHERE created_at >= ? ORDER BY created_at DESC LIMIT 500",
+            (cutoff,)).fetchall()
+        con.close()
+    except Exception as ex:
+        print("SKIP marvis（读取失败，防脆跳过: %s）" % ex)
+        return
+    for role, content, tool_name, created_at in rows:
+        if role not in ("assistant", "tool"):
+            continue
+        text = (content or "")[:4000]
+        if not text:
+            continue
+        m = ERROR_RE.search(text)
+        if not m:
+            continue
+        start = max(0, m.start() - 60)
+        snippet = text[start:m.end() + 120].strip()
+        if len(snippet) < 8:
+            continue
+        hits.append((signature(snippet), "marvis", db + ":" + str(tool_name or role), snippet))
+
+
 def self_report(st, dry):
     if dry or os.environ.get("SIFE_WATCH_ROOT"):
         return
@@ -193,6 +242,7 @@ def cmd_scan(dry, since, max_tickets):
     hits = []
     scan_codex(since, hits)
     scan_hermes(since, hits)
+    scan_marvis(since, hits)
     st = load_state()
     created = skipped = 0
     for sig, source, fp, snippet in hits:
