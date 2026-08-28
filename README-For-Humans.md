@@ -62,7 +62,7 @@ python3 scripts/new_card.py calibration "标尺名称"
 # 6. 月末体检
 # 建元卡，读出 4 指标
 
-# —— 四工具快速投递（DSH / GPT / Codex / Hermes 通用）——
+# —— 五工具快速投递（DSH / GPT / Codex / Hermes / Marvis 通用）——
 # 把 TEMPLATE-快速投递.md 复制到 00-Inbox/，填 5 行，然后：
 python3 scripts/ingest.py            # 自动 KEDB 查重 → 建 P 卡
 ```
@@ -88,9 +88,9 @@ python3 scripts/ingest.py            # 自动 KEDB 查重 → 建 P 卡
 - `schema.json` — 卡片字段定义 (v3.2.0)
 - `known_error_db.json` — 已知错误库
 
-## 四工具接入（V3.2 新增）
+## 五工具接入（V4.3 新增）
 
-DSH、GPT、Codex、Hermes 四个工具的问题与解决记录都要进这里：
+DSH、GPT、Codex、Hermes、Marvis 五个工具的问题与解决记录都要进这里：
 
 - 有命令行的工具（DSH / Codex / Hermes）：`new_card.py ... --tool <工具名>`
 - ChatGPT 没有命令行：把结论粘成快速投递放进 `00-Inbox/`，你跑一下 `ingest.py`

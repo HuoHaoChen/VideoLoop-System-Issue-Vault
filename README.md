@@ -84,9 +84,11 @@ SIFE（系统账号·独立隔离）
 - 升 rule_candidate 均经人工确认 + 方向阀
 - 本库独立于 control-plane / runtime-export / knowledge-vault
 
-## 四工具接入 (V3.2)
+## 五工具接入 (V4.3)
 
-DSH / GPT / Codex / Hermes 遇到的问题与解决记录统一进入本引擎。新卡带 `source_tool` 字段（hermes/codex/dsh/gpt/human/other），KEDB 复发自动 repeat_count+1 并挂 `ke_ref`。接入协议见 `config/四工具反馈接入协议.md`（唯一事实源），覆盖看板见 `30-Dashboards/四工具覆盖看板.md`。
+DSH / GPT / Codex / Hermes / Marvis 遇到的问题与解决记录统一进入本引擎（Marvis 走人肉投递）。
+
+DSH / GPT / Codex / Hermes / Marvis 遇到的问题与解决记录统一进入本引擎。新卡带 `source_tool` 字段（hermes/codex/dsh/gpt/human/other），KEDB 复发自动 repeat_count+1 并挂 `ke_ref`。接入协议见 `config/四工具反馈接入协议.md`（唯一事实源），覆盖看板见 `30-Dashboards/四工具覆盖看板.md`。
 
 ## 全自动模式 (V4.1)
 

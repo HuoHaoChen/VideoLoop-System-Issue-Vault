@@ -106,7 +106,7 @@ def process_file(fp, dry):
         print("跳过非投递件（缺 type: inbox）: %s" % os.path.basename(fp))
         return
     tool = fm.get("source_tool") or "human"
-    if tool not in ("hermes", "codex", "dsh", "gpt", "human", "other"):
+    if tool not in ("hermes", "codex", "dsh", "gpt", "marvis", "human", "other"):
         tool = "human"
     title    = pick_title(fm, body)
     severity = fm.get("severity") or "待定"

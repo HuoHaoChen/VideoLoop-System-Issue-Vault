@@ -169,7 +169,7 @@ def run(root):
             if not st and created >= "2026-08-26":
                 warns.append("[source_tool缺失] " + rel
                              + " 新卡缺 source_tool（2026-08-26 起新卡必填）")
-            if st and st not in ("hermes", "codex", "dsh", "gpt", "human", "other"):
+            if st and st not in ("hermes", "codex", "dsh", "gpt", "marvis", "human", "other"):
                 warns.append("[source_tool非法] " + rel
                              + " source_tool=" + str(st))
             kr = fm.get("ke_ref")

@@ -11,6 +11,10 @@
 - ingest/ticket 透传 domain；watcher 投递件命名防同秒覆盖
 - 人零操作；唯一保留人工：S1 升级、KEDB 新条目登记
 
+## 4.3.0 (2026-08-28) — 五工具接入（Marvis）
+- 协议升级：四工具 → 五工具（DSH/GPT/Codex/Hermes/Marvis）
+- source_tool 枚举新增 marvis；Marvis 走人肉投递通道（无 shell，私有 SQLite 不做自动扫描）
+
 ## 4.0.0 (2026-08-27) — 统一问题反馈引擎 v4
 - 定位升级：系统故障 + 工作问题统一入口（解决方案优先，30 秒闭环）
 - problem 新增 solution / solution_status / resolved_at 字段

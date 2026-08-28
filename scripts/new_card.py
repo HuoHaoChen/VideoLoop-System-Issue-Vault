@@ -17,9 +17,9 @@ CN      = {"problem":"问题卡","change":"修改卡","calibration":"校准卡",
            "persona":"人格卡","values":"价值观卡","worldview":"世界观卡"}
 
 # ── V3.2 四工具接入：工具 → source_tool / recorded_by 身份 ─────
-TOOL_VALID = {"hermes","codex","dsh","gpt","human","other"}
+TOOL_VALID = {"hermes","codex","dsh","gpt","marvis","human","other"}
 RECORDER   = {"hermes":"hermes-A","codex":"codex-A","dsh":"dsh-A",
-              "gpt":"gpt-A","human":"huohaochen","other":"huohaochen"}
+              "gpt":"gpt-A","marvis":"marvis-A","human":"huohaochen","other":"huohaochen"}
 
 def build_card(KIND, TITLE, TOOL="human", extra=None):
     """生成一张卡并写盘。返回 (文件路径, 卡ID)。extra: 附加 frontmatter 键值对。"""
