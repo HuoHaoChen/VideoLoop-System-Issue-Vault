@@ -211,17 +211,17 @@ def scan_marvis(since, hits):
 
 def self_report(st, dry):
     if dry or os.environ.get("SIFE_WATCH_ROOT"):
-        return
+        return False
     if not os.path.exists(ERR_LOG):
-        return
+        return False
     cur = os.path.getsize(ERR_LOG)
     if cur <= int(st.get("err_mark", 0)):
-        return
+        return False
     with open(ERR_LOG, encoding="utf-8", errors="ignore") as f:
         f.seek(max(0, cur - 2000))
         tail = f.read().strip()
     if not tail:
-        return
+        return False
     fn = os.path.join(INBOX, "auto-%s-self.md" % datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
     with open(fn, "w", encoding="utf-8") as f:
         f.write("---\ntype: inbox\nsource_tool: launchd\nseverity: 待定\ndomain: 系统\n"
@@ -235,6 +235,7 @@ def self_report(st, dry):
             INGEST.main()
         except Exception as ex:
             print("FAIL 自报入库异常（下轮重试）: %s" % ex)
+    return True
 
 # ─────────────────────────── 扫描建卡 ───────────────────────────
 
@@ -547,7 +548,8 @@ def main():
     rc = 0
     if do_scan:
         st = load_state()
-        self_report(st, dry)
+        if self_report(st, dry):
+            save_state(st)
         rc |= cmd_scan(dry, since, max_tickets)
     if do_verify:
         rc |= cmd_verify(dry)

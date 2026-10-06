@@ -34,7 +34,7 @@ S1 走方向阀 → control-plane rule_candidate
 ## 怎么用
 
 ```bash
-cd ~/Desktop/系统问题反馈引擎
+cd ~/Desktop/Project/系统问题反馈引擎
 
 # 0. 30 秒快速建卡（四工具通用）
 python3 scripts/ticket.py "标题" --症状 "..." --解决 "..." --域 系统 --工具 dsh

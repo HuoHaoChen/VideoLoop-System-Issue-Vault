@@ -1,0 +1,66 @@
+---
+id: P-20260829-004656
+type: problem
+title: # extract_frames_39.py -rw-r--r--@ # huohaochen staff # aug
+ptype: 待分类
+level: 待定
+status: 未处理
+process_captured: false
+recorded_by: marvis-A
+source_tool: marvis
+solution: 
+solution_status: 待解决
+solution_hits: 0
+solution_level: 待验证
+resolved_at: 
+due: 
+owner: huohaochen
+severity: 待定
+detected_at: 2026-08-29 00:46
+domain: 系统
+sig: # extract_frames_39.py -rw-r--r--@ # huohaochen staff # aug # #:# extract_frames_b2.py drw
+created: 2026-08-29
+tags: [problem]
+---
+
+# 🟢 # extract_frames_39.py -rw-r--r--@ # huohaochen staff # aug
+
+==待处理== · 待分类 · <kbd>未设</kbd>
+
+---
+
+> [!question]+ 结论
+> 
+
+---
+
+> [!quote] 发生了什么
+
+**事实链：**
+
+```
+
+```
+
+---
+
+| 判断 | 依据 |
+|:-----|:-----|
+| ==判断== | 依据 |
+
+---
+
+> [!warning] 可能偏差
+> - 
+> - 
+
+---
+
+> [!note]- 过程层（复盘时展开）
+> **原话**：
+> 
+> 
+> **关键分歧**：
+> 
+> 
+> **标尺**：[[]]
